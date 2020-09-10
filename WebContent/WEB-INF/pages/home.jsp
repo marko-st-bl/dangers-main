@@ -334,7 +334,28 @@
 											+ '<a class="post-button btn col-4" href="#"><i class="fab fa-facebook"></i> Facebook</a>'
 											+ '<a class="post-button btn col-4" href="#"><i class="fab fa-twitter"></i> Twitter</a>'
 											+ '</div>'
-											+ '<div id="comment-container-'+posts[i].id+'" class="new-comment-container row align-items-center" style="display: none">'
+											+ '<div class="comments py-2">';
+									for(let j in posts[i].comments){
+										output+=
+											 '<div class="row">'
+											+ 	'<div class="comment-avatar-container col-2 col-lg-1">'
+											+ 		'<img class="comment-avatar rounded-circle" src="'+posts[i].comments[j].author.avatar+'" alt="">'
+											+ 	'</div>'
+											+ 	'<div class="col-10 col-lg-11">'
+											+ 		'<div class="p-2 bg-light">'
+											+ 			'<h6 class="comment-author">'+posts[i].comments[j].author.firstName+ ' ' +posts[i].comments[j].author.lastName+ '</h6>'
+											+ 			'<p class="comment-text">'+posts[i].comments[j].text+'</p>'
+											+ 		'</div>';
+											if(posts[i].comments[j].url){
+												output+= '<img src="" alt="" width="100%">';
+											}
+											output+='</div>'
+											+'</div>';
+											
+									}
+									output+= '</div>';
+											
+											output+= '<div id="comment-container-'+posts[i].id+'" class="new-comment-container row align-items-center" style="display: none">'
 											+ '<div class="p-1 col-2">'
 											+ '<img class="rounded-circle comment-avatar" src="'+ posts[i].owner.avatar +'">'
 											+ '</div>'

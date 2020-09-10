@@ -51,7 +51,7 @@ public class Posts extends HttpServlet {
 		List<Post> posts = new PostBean().getAllPosts();
 		for(Post post : posts) {
 			List<Comment> comments = new CommentBean().getCommentsByPostId(post.getId());
-			news.add(new News(post.getId(), post.getOwner(), post.getType(), post.getUrl(), post.getCreatedAt(), comments));
+			news.add(new News(post.getId(), post.getOwner(), post.getText(), post.getType(), post.getUrl(), post.getCreatedAt(), comments));
 		}
 		RSSFeedParser rssParser = new RSSFeedParser("https://europa.eu/newsroom/calendar.xml_en?field_nr_events_by_topic_tid=151");
 		RSSFeed rssFeed = rssParser.readFeed();

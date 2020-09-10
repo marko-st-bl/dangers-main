@@ -18,11 +18,13 @@ public class CommentDAO {
 		ResultSet rs = null;
 		
 		String query = "select id, userId, text, url, createdAt "
-				+ "from comment";
+				+ "from comment where postId=? "
+				+ "order by createdAt desc";
 		
 		try {
 			conn = ConnectionPool.getConnectionPool().checkOut();
 			ps = conn.prepareStatement(query);
+			ps.setInt(1, postId);
 			rs = ps.executeQuery();
 			
 			while(rs.next()) {

@@ -35,7 +35,7 @@ public class News implements Serializable, Comparable<News>{
 	/*
 	 * Constructor for Post
 	 */
-	public News(int id, User owner, String type, String url, Timestamp createdAt, List<Comment> comments) {
+	public News(int id, User owner, String text, String type, String url, Timestamp createdAt, List<Comment> comments) {
 		super();
 		this.id = id;
 		this.owner = owner;
@@ -43,6 +43,7 @@ public class News implements Serializable, Comparable<News>{
 		this.url = url;
 		this.createdAt = createdAt;
 		this.comments = comments;
+		this.text = text;
 	}
 	
 	/*
