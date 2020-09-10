@@ -328,7 +328,11 @@
 									output += '<div class="row">'
 											+ '<button id="comment-btn-'+ posts[i].id +'" class="post-button btn col-4" type="button"><i class="far fa-comment"></i> Comment</button>'
 											+ '<button class="post-button btn col-4" type="button"><i class="far fa-comments"></i> Comments</button>'
-											+ '<button id="share-btn" class="post-button btn col-4" type="button"><i class="far fa-share-square"></i> Share</button>'
+											+ '<button id="share-btn-'+posts[i].id+'" class="post-button btn col-4" type="button"><i class="far fa-share-square"></i> Share</button>'
+											+ '</div>'
+											+ '<div id="share-buttons-'+posts[i].id+'" class="row justify-content-end" style="display: none">'
+											+ '<a class="post-button btn col-4" href="#"><i class="fab fa-facebook"></i> Facebook</a>'
+											+ '<a class="post-button btn col-4" href="#"><i class="fab fa-twitter"></i> Twitter</a>'
 											+ '</div>'
 											+ '<div id="comment-container-'+posts[i].id+'" class="new-comment-container row align-items-center" style="display: none">'
 											+ '<div class="p-1 col-2">'
@@ -437,6 +441,9 @@
 																			$('#comment-img-preview-'+posts[i].id).attr('src', '');
 																		});
 													});
+									$('#share-btn-'+posts[i].id).click(function(){
+										$('#share-buttons-'+posts[i].id).toggle();
+									});
 								} else if ($("#post" + posts[i].guid).length == 0
 										&& posts[i].type == "rss") {
 									$('.posts')

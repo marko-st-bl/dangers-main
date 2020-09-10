@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -17,7 +18,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
+import marko.ip.beans.CommentBean;
 import marko.ip.beans.PostBean;
+import marko.ip.dto.Comment;
+import marko.ip.dto.News;
 import marko.ip.dto.Post;
 import marko.ip.rss.RSSFeed;
 import marko.ip.rss.RSSFeedMessage;
@@ -43,26 +47,25 @@ public class Posts extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		List<News> news = new ArrayList<>();
 		List<Post> posts = new PostBean().getAllPosts();
+		for(Post post : posts) {
+			List<Comment> comments = new CommentBean().getCommentsByPostId(post.getId());
+			news.add(new News(post.getId(), post.getOwner(), post.getType(), post.getUrl(), post.getCreatedAt(), comments));
+		}
 		RSSFeedParser rssParser = new RSSFeedParser("https://europa.eu/newsroom/calendar.xml_en?field_nr_events_by_topic_tid=151");
 		RSSFeed rssFeed = rssParser.readFeed();
 		DateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z");
 		for(RSSFeedMessage message: rssFeed.getEntries()) {
-			Post post = new Post();
-			post.setType("rss");
-			post.setTitle(message.getTitle());
-			post.setText(message.getDescription());
-			post.setUrl(message.getLink());
-			post.setGuid(message.getGuid().replaceAll("[^a-zA-Z]", ""));
 			try {
-				post.setCreatedAt(new Timestamp(sdf.parse(message.getPubDate()).getTime()));
-			} catch (ParseException e) {
-				e.printStackTrace();
+				news.add(new News(message.getGuid().replaceAll("[^a-zA-Z]", ""), message.getTitle(), message.getDescription(),
+						message.getLink(), new Timestamp(sdf.parse(message.getPubDate()).getTime())));
+			} catch (ParseException e1) {
+				e1.printStackTrace();
 			}
-			posts.add(post);
 		}
-		Collections.sort(posts);
-		String postsJSONString = this.gson.toJson(posts);
+		Collections.sort(news);
+		String newsJSONString = this.gson.toJson(news);
 		PrintWriter out = response.getWriter();
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
@@ -70,7 +73,7 @@ public class Posts extends HttpServlet {
         response.addHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, HEAD");
         response.addHeader("Access-Control-Allow-Headers", "X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept");
         response.addHeader("Access-Control-Max-Age", "1728000");
-		out.print(postsJSONString);
+		out.print(newsJSONString);
 		out.flush();
 	}
 
