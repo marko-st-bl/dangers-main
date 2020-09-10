@@ -62,7 +62,7 @@ public class NewComment extends HttpServlet {
 		commentBean.getComment().setPostId(postId);
 		commentBean.getComment().setAuthor(userBean.getUser());
 		if(imgPart.getSize() != 0) {
-			input = request.getInputStream();
+			input = imgPart.getInputStream();
 			String name = new Date().getTime() + ".jpg";
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			String contextPath = getServletContext().getRealPath("/assets/img/comment/");

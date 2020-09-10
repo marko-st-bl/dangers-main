@@ -53,6 +53,7 @@ public class Posts extends HttpServlet {
 			post.setTitle(message.getTitle());
 			post.setText(message.getDescription());
 			post.setUrl(message.getLink());
+			post.setGuid(message.getGuid().replaceAll("[^a-zA-Z]", ""));
 			try {
 				post.setCreatedAt(new Timestamp(sdf.parse(message.getPubDate()).getTime()));
 			} catch (ParseException e) {

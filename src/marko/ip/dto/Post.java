@@ -18,7 +18,16 @@ public class Post implements Serializable, Comparable<Post>{
 	private Timestamp createdAt;
 	
 	private String title;
+	private String guid;
 	
+	public String getGuid() {
+		return guid;
+	}
+
+	public void setGuid(String guid) {
+		this.guid = guid;
+	}
+
 	public Post() {
 		super();
 	}
@@ -91,7 +100,7 @@ public class Post implements Serializable, Comparable<Post>{
 
 	@Override
 	public int compareTo(Post o) {
-		return o.getCreatedAt().compareTo(this.getCreatedAt());
+		return this.createdAt.compareTo(o.createdAt);
 	}
 	
 	

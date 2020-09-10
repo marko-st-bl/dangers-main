@@ -186,7 +186,7 @@
 			if (this.status == 200) {
 				countries = JSON.parse(this.responseText);
 				let output = '';
-				for ( let i in countries) {
+				for ( let i in countries) { 
 					if (countries[i].name == country) {
 						lat = countries[i].latlng[0];
 						lon = countries[i].latlng[1];
@@ -313,25 +313,6 @@
 												+ '<video class="my-2" width="100%" controls>'
 												+ '<source src="' + posts[i].url + '" type="video/mp4"/>'
 												+ '</video>' + '</div>';
-									} else if (posts[i].type == "rss") {
-										$('.posts')
-												.append(
-														'<div class="post my-1">'
-																+ '<div class="row">'
-																+ '<h5 class="pl-2">'
-																+ posts[i].title
-																+ '</h5>'
-																+ '</div>'
-																+ '<div class="row text-muted">'
-																+ posts[i].createdAt
-																+ '</div>'
-																+ '<div class="row">'
-																+ '<p class="my-1">'
-																+ posts[i].text
-																+ '<a target="_blank" href="' + posts[i].url +'"> Read More</a>'
-																+ '</p>'
-																+ '</div>'
-																+ '</div>');
 									} else if (posts[i].type == "youtube") {
 										output += '<div class="row">'
 												+ '<div class="embed-responsive embed-responsive-16by9">'
@@ -343,45 +324,35 @@
 										output += '<div class="row">'
 												+ '<a class="my-2" target="_blank" href="'+posts[i].url+'">LINK</a>'
 												+ '</div>';
-									} else {
-
 									}
-									output+=
-									 '<div class="row">'
-									 + 	'<button id="comment-btn-'+ posts[i].id +'" class="post-button btn col-4" type="button"><i class="far fa-comment"></i> Comment</button>'
-									 + 	'<button class="post-button btn col-4" type="button"><i class="far fa-comments"></i> Comments</button>'
-									 + 	'<button id="share-btn" class="post-button btn col-4" type="button"><i class="far fa-share-square"></i> Share</button>'
-									 + '</div>'
-									 + '<div id="comment-container-'+posts[i].id+'" class="new-comment-container row align-items-center" style="display: none">'
-									 + 	'<div class="p-1 col-2">'
-									 + 		'<img class="rounded-circle comment-avatar" src="'+ posts[i].owner.avatar +'">'
-									 + 	'</div>'
-									 + 	'<div class="p-1 col-10">'
-									 + 		'<form id="form-'+ posts[i].id +'" action="http://localhost:8080/dangers-main/NewComment" method="POST" enctype="multipart/form-data">'
-									 + 			'<div class="comment-form row">'
-									 + 				'<input id="comment-input-'+ posts[i].id +'" class="col-9" type="text" name="text" placeholder="Write a comment..."/>'
-									 + 				'<button id="new-comment-btn-'+ posts[i].id +'" class="btn col-2" type="button"><i class="fas fa-image"></i></button>'
-									 + 			'</div>'
-									 + 			'<input id="comment-img-input-'+ posts[i].id +'" type="file" name="image" accept="image/*" style="display: none"/>'
-									 + 			'<input type="text" name="postId" value="' + posts[i].id +'" style="display: none"/>'
-									 + 			'<button id="btn-'+ posts[i].id +'" type="submit" style="display: none"></button>'
-									 + 		'</form>'
-									 + 	'</div>'
-									 + '<div>'
-									 + 	'<div class="row">'
-									 + '<img id="comment-img-preview-'
-									 + posts[i].id
-									 + '" src="" width="100%">'
-									 + '</div>'
-									 + '</div>'
-									 + '</div>'
-									 + '</div>';
-									 
-									
-									$('.posts').append(output);
-								}
-								if (posts[i].type !== 'rss') {
-									console.log('NOT RSS POST');
+									output += '<div class="row">'
+											+ '<button id="comment-btn-'+ posts[i].id +'" class="post-button btn col-4" type="button"><i class="far fa-comment"></i> Comment</button>'
+											+ '<button class="post-button btn col-4" type="button"><i class="far fa-comments"></i> Comments</button>'
+											+ '<button id="share-btn" class="post-button btn col-4" type="button"><i class="far fa-share-square"></i> Share</button>'
+											+ '</div>'
+											+ '<div id="comment-container-'+posts[i].id+'" class="new-comment-container row align-items-center" style="display: none">'
+											+ '<div class="p-1 col-2">'
+											+ '<img class="rounded-circle comment-avatar" src="'+ posts[i].owner.avatar +'">'
+											+ '</div>'
+											+ '<div class="p-1 col-10">'
+											+ '<form id="form-'+ posts[i].id +'" action="http://localhost:8080/dangers-main/NewComment" method="POST" enctype="multipart/form-data">'
+											+ '<div class="comment-form row">'
+											+ '<input id="comment-input-'+ posts[i].id +'" class="col-9" type="text" name="text" placeholder="Write a comment..."/>'
+											+ '<button id="new-comment-btn-'+ posts[i].id +'" class="btn col-2" type="button"><i class="fas fa-image"></i></button>'
+											+ '</div>'
+											+ '<input id="comment-img-input-'+ posts[i].id +'" type="file" name="image" accept="image/*" style="display: none"/>'
+											+ '<input type="text" name="postId" value="' + posts[i].id +'" style="display: none"/>'
+											+ '<button id="btn-'+ posts[i].id +'" type="submit" style="display: none"></button>'
+											+ '</form>' + '</div>' + '<div>'
+											+ '<div class="row">'
+											+ '<img id="comment-img-preview-'
+											+ posts[i].id
+											+ '" src="" width="100%">'
+											+ '</div>' + '</div>' + '</div>'
+											+ '</div>';
+
+									$('.posts').prepend(output);
+
 									$('#comment-btn-' + posts[i].id).click(
 											function() {
 												$(
@@ -460,10 +431,31 @@
 																.done(
 																		function(
 																				response) {
-																			console
-																					.log(response);
+																			$('#form-' + posts[i].id).each(function(){
+																				this.reset();
+																			});
+																			$('#comment-img-preview-'+posts[i].id).attr('src', '');
 																		});
 													});
+								} else if ($("#post" + posts[i].guid).length == 0
+										&& posts[i].type == "rss") {
+									$('.posts')
+											.prepend(
+													'<div id="post'+posts[i].guid+'" class="post my-1">'
+															+ '<div class="row">'
+															+ '<h5 class="pl-2">'
+															+ posts[i].title
+															+ '</h5>'
+															+ '</div>'
+															+ '<div class="row text-muted">'
+															+ posts[i].createdAt
+															+ '</div>'
+															+ '<div class="row">'
+															+ '<p class="my-1">'
+															+ posts[i].text
+															+ '<a target="_blank" href="' + posts[i].url +'"> Read More</a>'
+															+ '</p>' + '</div>'
+															+ '</div>');
 								}
 							}
 						});
