@@ -19,7 +19,7 @@ public class CommentDAO {
 		
 		String query = "select id, userId, text, url, createdAt "
 				+ "from comment where postId=? "
-				+ "order by createdAt desc";
+				+ "order by createdAt asc";
 		
 		try {
 			conn = ConnectionPool.getConnectionPool().checkOut();

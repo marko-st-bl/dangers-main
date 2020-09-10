@@ -285,7 +285,6 @@
 				.done(
 						function(posts) {
 							console.log(posts);
-							//$('.posts').empty();
 							for ( let i in posts) {
 								let output = '';
 								if ($('#post-' + posts[i].id).length == 0
@@ -469,6 +468,30 @@
 									$('#share-btn-'+posts[i].id).click(function(){
 										$('#share-buttons-'+posts[i].id).toggle();
 									});
+								} else if ($("#post-" + posts[i].id).length !== 0
+										&& posts[i].type !== "rss"){
+									$('#comments-'+posts[i].id).empty();
+									let output='';
+									for(let j in posts[i].comments){
+										output+=
+											 '<div class="row">'
+											+ 	'<div class="comment-avatar-container col-2 col-lg-1">'
+											+ 		'<img class="comment-avatar rounded-circle" src="'+posts[i].comments[j].author.avatar+'" alt="">'
+											+ 	'</div>'
+											+ 	'<div class="col-10 col-lg-11">'
+											+ 		'<div class="p-2 bg-light">'
+											+ 			'<h6 class="comment-author">'+posts[i].comments[j].author.firstName+ ' ' +posts[i].comments[j].author.lastName+ '</h6>'
+											+ 			'<p class="comment-text">'+posts[i].comments[j].text+'</p>'
+											+ 		'</div>';
+											if(posts[i].comments[j].url){
+												output+= '<img src="" alt="" width="100%">';
+											}
+											output+='</div>'
+											+'</div>';
+									}
+									output+='</div>';
+									$('#comments-'+posts[i].id).append(output);
+									
 								} else if ($("#post" + posts[i].guid).length == 0
 										&& posts[i].type == "rss") {
 									$('.posts')
