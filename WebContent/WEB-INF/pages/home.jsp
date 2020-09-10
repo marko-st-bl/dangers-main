@@ -345,8 +345,9 @@
 											+ 			'<h6 class="comment-author">'+posts[i].comments[j].author.firstName+ ' ' +posts[i].comments[j].author.lastName+ '</h6>'
 											+ 			'<p class="comment-text">'+posts[i].comments[j].text+'</p>'
 											+ 		'</div>';
-											if(posts[i].comments[j].url){
-												output+= '<img src="" alt="" width="100%">';
+											if(posts[i].comments[j]['url']){
+												console.log('PICTURE');
+												output+= '<img src="'+posts[i].comments[j].url+'" alt="" width="100%">';
 											}
 											output+='</div>'
 											+'</div>';
@@ -483,8 +484,8 @@
 											+ 			'<h6 class="comment-author">'+posts[i].comments[j].author.firstName+ ' ' +posts[i].comments[j].author.lastName+ '</h6>'
 											+ 			'<p class="comment-text">'+posts[i].comments[j].text+'</p>'
 											+ 		'</div>';
-											if(posts[i].comments[j].url){
-												output+= '<img src="" alt="" width="100%">';
+											if(posts[i].comments[j]['url']){
+												output+= '<img src="'+posts[i].comments[j].url+'" alt="" width="100%">';
 											}
 											output+='</div>'
 											+'</div>';
