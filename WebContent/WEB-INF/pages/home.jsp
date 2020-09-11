@@ -325,13 +325,12 @@
 												+ '</div>';
 									}
 									output += '<div class="row">'
-											+ '<button id="comment-btn-'+ posts[i].id +'" class="post-button btn col-4" type="button"><i class="far fa-comment"></i> Comment</button>'
-											+ '<button id="comments-btn-'+posts[i].id+'" class="post-button btn col-4" type="button"><i class="far fa-comments"></i> Comments</button>'
-											+ '<button id="share-btn-'+posts[i].id+'" class="post-button btn col-4" type="button"><i class="far fa-share-square"></i> Share</button>'
+											+ '<button id="comment-btn-'+ posts[i].id +'" class="post-button btn col-6" type="button"><i class="far fa-comment"></i> Comment</button>'
+											+ '<button id="comments-btn-'+posts[i].id+'" class="post-button btn col-6" type="button"><i class="far fa-comments"></i> Comments</button>'
 											+ '</div>'
-											+ '<div id="share-buttons-'+posts[i].id+'" class="row justify-content-end" style="display: none">'
-											+ '<a class="post-button btn col-4" href="#"><i class="fab fa-facebook"></i> Facebook</a>'
-											+ '<a class="post-button btn col-4" href="#"><i class="fab fa-twitter"></i> Twitter</a>'
+											+ '<div class="share-buttons-container row justify-content-end">'
+											+ '<iframe id="tweet-button" allowtransparency="true" frameborder="0" scrolling="no" src="http://platform.twitter.com/widgets/tweet_button.html?via=&amp;text='+posts[i].url+'&amp;count=horizontal" style="width:110px; height:20px;"></iframe>'
+											+ '<iframe id="share-button" src="https://www.facebook.com/plugins/share_button.php?href='+posts[i].url+'&layout=button&size=small&width=67&height=20&appId" width="67" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" allow="encrypted-media"></iframe>'
 											+ '</div>'
 											+ '<div id="comments-'+posts[i].id+'" class="comments py-2" style="display: none">';
 									for(let j in posts[i].comments){
