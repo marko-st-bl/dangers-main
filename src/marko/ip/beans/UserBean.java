@@ -2,6 +2,7 @@ package marko.ip.beans;
 
 import java.io.Serializable;
 
+import marko.ip.dao.LoginDAO;
 import marko.ip.dao.UserDAO;
 import marko.ip.dto.User;
 
@@ -19,9 +20,18 @@ public class UserBean implements Serializable{
 		user = new UserDAO().getUserByUsernamePassword(username, password);
 		if(user != null && user.getStatus().equals("active")) {
 			isLoggedIn = true;
+			addLogin();
 			return true;
 		}
 		return false;
+	}
+	
+	public boolean addLogin() {
+		return new LoginDAO().addUserLogin(user.getId());
+	}
+	
+	public int getNumOfLogins() {
+		return new LoginDAO().getNumberOfLoginsById(user.getId());
 	}
 	
 	public boolean isUsernameUsed(String username) {
@@ -52,5 +62,12 @@ public class UserBean implements Serializable{
 		this.user = user;
 	}
 
+	public boolean isLoggedIn() {
+		return isLoggedIn;
+	}
+
+	public void setLoggedIn(boolean isLoggedIn) {
+		this.isLoggedIn = isLoggedIn;
+	}
 	
 }

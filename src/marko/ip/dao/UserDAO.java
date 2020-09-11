@@ -17,7 +17,7 @@ public class UserDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
-		String query = "select id, firstName, lastName, email, password, country, region, city, avatar, status, numOfLogin, "
+		String query = "select id, firstName, lastName, email, password, country, region, city, avatar, status, "
 				+ "createdAt, notificationApp, notificationEmail "
 				+ "from user";
 		
@@ -29,7 +29,7 @@ public class UserDAO {
 			while(rs.next()) {
 				retVal.add(new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), 
 						rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10), rs.getString(11),
-						rs.getInt(12), rs.getTimestamp(13), rs.getBoolean(14), rs.getBoolean(15)));
+						rs.getTimestamp(12), rs.getBoolean(13), rs.getBoolean(14)));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -71,7 +71,7 @@ public class UserDAO {
 		PreparedStatement ps =null;
 		ResultSet rs = null;
 		
-		String query = "select id, firstName, lastName, username, password, email, country, region, city, avatar, status, numOfLogin, "
+		String query = "select id, firstName, lastName, username, password, email, country, region, city, avatar, status, "
 				+ "createdAt, notificationApp, notificationEmail "
 				+ "from user where username=? and password=?";
 		
@@ -85,7 +85,7 @@ public class UserDAO {
 			if(rs.next()) {
 				retVal = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), 
 						rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10),
-						rs.getString(11), rs.getInt(12), rs.getTimestamp(13), rs.getBoolean(14), rs.getBoolean(15));
+						rs.getString(11), rs.getTimestamp(12), rs.getBoolean(13), rs.getBoolean(14));
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();

@@ -184,7 +184,6 @@ public class Controller extends HttpServlet {
 				}
 				if (profileUpdateResult.equals("OK")) {
 					userBean.getUser().setUsername(username);
-					userBean.getUser().setPassword(password1);
 					userBean.getUser().setFirstName(firstName);
 					userBean.getUser().setLastName(lastName);
 					userBean.getUser().setEmail(email);

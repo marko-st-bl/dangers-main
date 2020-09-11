@@ -21,7 +21,6 @@ public class User implements Serializable{
 	private String city;
 	private String avatar;
 	private String status;
-	private int numOfLogin;
 	private Timestamp createdAt;
 	private boolean notificationApp;
 	private boolean notificationEmail;
@@ -33,7 +32,7 @@ public class User implements Serializable{
 	// Constructor that takes all parameters
 	public User(int id, String firstName, String lastName, String username, String password, 
 			String email, String country, String region,String city, String avatar, String status, 
-			int numOfLogin, Timestamp createdAt, boolean notificationApp, boolean notificationEmail) {
+			Timestamp createdAt, boolean notificationApp, boolean notificationEmail) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -46,7 +45,6 @@ public class User implements Serializable{
 		this.city = city;
 		this.avatar = avatar;
 		this.status = status;
-		this.numOfLogin = numOfLogin;
 		this.createdAt = createdAt;
 		this.notificationApp=notificationApp;
 		this.notificationEmail=notificationEmail;
@@ -156,14 +154,6 @@ public class User implements Serializable{
 
 	public void setStatus(String status) {
 		this.status = status;
-	}
-
-	public int getNumOfLogin() {
-		return numOfLogin;
-	}
-
-	public void setNumOfLogin(int numOfLogin) {
-		this.numOfLogin = numOfLogin;
 	}
 
 	public Timestamp getCreatedAt() {

@@ -54,7 +54,7 @@
 				</div>
 				<div id="firstName" class="row justify-content-center"><%=userBean.getUser().getFirstName()%></div>
 				<div id="lastName" class="row justify-content-center"><%=userBean.getUser().getLastName()%></div>
-				<div class="row justify-content-center text-muted" id="numOfLogin"><%=userBean.getUser().getNumOfLogin()%></div>
+				<div class="row justify-content-center text-muted" id="numOfLogin"><%=userBean.getNumOfLogins()%></div>
 			</div>
 			<!--MAIN-->
 			<div class="posts-container col-sm-9 col-md-8">
