@@ -57,7 +57,6 @@ public class Controller extends HttpServlet {
 			String username = request.getParameter("username");
 			String password = request.getParameter("password");
 			UserBean userBean = new UserBean();
-			System.out.println("login");
 			if (userBean.login(username, password)) {
 				session.setAttribute("userBean", userBean);
 				address = "/WEB-INF/pages/home.jsp";
@@ -67,15 +66,8 @@ public class Controller extends HttpServlet {
 		 * LOGOUT
 		 */
 		else if (action.equals("logout")) {
-			System.out.println("logut");
-			UserBean userBean = (UserBean) session.getAttribute("userBean");
-			System.out.println("OUT" + userBean.getUser().getId());
-			if (userBean != null) {
-				userBean.logut();
-			}
 			session.invalidate();
 			address = "/WEB-INF/pages/index.jsp";
-
 		}
 		/*
 		 * REGISTER
@@ -218,6 +210,8 @@ public class Controller extends HttpServlet {
 				address = "WEB-INF/pages/profile.jsp";
 			}
 			session.setAttribute("profileUpdateResult", profileUpdateResult);
+		} else {
+			address = "/WEB-INF/pages/index.jsp";
 		}
 		RequestDispatcher dispatcher = request.getRequestDispatcher(address);
 		dispatcher.forward(request, response);

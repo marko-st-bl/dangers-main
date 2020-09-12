@@ -30,7 +30,6 @@ public class UserBean implements Serializable, HttpSessionBindingListener {
 	}
 	
 	public void logut() {
-		System.out.println("user: "+ user.getId() + "logged out.");
 		new LoginDAO().addLogut(user.getId());
 	}
 
