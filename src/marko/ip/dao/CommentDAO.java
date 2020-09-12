@@ -31,6 +31,8 @@ public class CommentDAO {
 				retVal.add(new Comment(rs.getInt(1), new UserDAO().getUserById(rs.getInt(2)), rs.getString(3), rs.getString(4),
 						rs.getTimestamp(5)));
 			}
+			
+			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally{
@@ -54,6 +56,8 @@ public class CommentDAO {
 			ps.setString(3, comment.getText());
 			ps.setString(4, comment.getUrl());
 			retVal = ps.executeUpdate() == 1;
+			
+			ps.close();
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}finally {

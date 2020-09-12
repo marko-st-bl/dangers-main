@@ -2,11 +2,14 @@ package marko.ip.beans;
 
 import java.io.Serializable;
 
+import javax.servlet.http.HttpSessionBindingEvent;
+import javax.servlet.http.HttpSessionBindingListener;
+
 import marko.ip.dao.LoginDAO;
 import marko.ip.dao.UserDAO;
 import marko.ip.dto.User;
 
-public class UserBean implements Serializable{
+public class UserBean implements Serializable, HttpSessionBindingListener {
 
 	/**
 	 * 
@@ -15,10 +18,10 @@ public class UserBean implements Serializable{
 
 	private boolean isLoggedIn = false;
 	private User user = new User();
-	
+
 	public boolean login(String username, String password) {
 		user = new UserDAO().getUserByUsernamePassword(username, password);
-		if(user != null && user.getStatus().equals("active")) {
+		if (user != null && user.getStatus().equals("active")) {
 			isLoggedIn = true;
 			addLogin();
 			return true;
@@ -26,34 +29,38 @@ public class UserBean implements Serializable{
 		return false;
 	}
 	
+	public void logut() {
+		new LoginDAO().addLogut(user.getId());
+	}
+
 	public boolean addLogin() {
 		return new LoginDAO().addUserLogin(user.getId());
 	}
-	
+
 	public int getNumOfLogins() {
 		return new LoginDAO().getNumberOfLoginsById(user.getId());
 	}
-	
+
 	public boolean isUsernameUsed(String username) {
 		return new UserDAO().isUsernameUsed(username);
 	}
-	
+
 	public boolean isEmailUsed(String email) {
 		return new UserDAO().isEmailUsed(email);
 	}
-	
+
 	public boolean addUser() {
 		return new UserDAO().addUser(user);
 	}
-	
+
 	public void readUser() {
 		user = new UserDAO().getUserByUsernamePassword(user.getUsername(), user.getPassword());
 	}
-	
+
 	public boolean updateUser() {
 		return new UserDAO().updateUser(user);
 	}
-	
+
 	public User getUser() {
 		return user;
 	}
@@ -69,5 +76,14 @@ public class UserBean implements Serializable{
 	public void setLoggedIn(boolean isLoggedIn) {
 		this.isLoggedIn = isLoggedIn;
 	}
-	
+
+	/*
+	@Override
+	public void valueUnbound(HttpSessionBindingEvent event) {
+		System.out.println("User logged out");
+		System.out.println(user.getId());
+		new LoginDAO().addLogut(user.getId());
+	}
+	*/
+
 }

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import marko.ip.dto.Post;
-import marko.ip.dto.User;
 
 public class PostDAO {
 	
@@ -30,6 +29,8 @@ public class PostDAO {
 				retVal.add(new Post(rs.getInt(1), new UserDAO().getUserById(rs.getInt(2)), 
 						rs.getString(3), rs.getString(4), rs.getString(5), rs.getTimestamp(6)));
 			}
+			
+			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally{
@@ -53,6 +54,8 @@ public class PostDAO {
 			ps.setString(3, post.getType());
 			ps.setString(4, post.getUrl());
 			retVal = ps.executeUpdate() == 1;
+			
+			ps.close();
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}finally {

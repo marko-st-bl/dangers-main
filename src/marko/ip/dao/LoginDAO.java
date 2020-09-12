@@ -26,6 +26,8 @@ public class LoginDAO {
 			if(rs.next()) {
 				retVal = rs.getInt(1);
 			}
+			
+			ps.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -48,11 +50,34 @@ public class LoginDAO {
 			
 			retVal = ps.executeUpdate() == 1;
 			
+			ps.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} finally {
 			ConnectionPool.getConnectionPool().checkIn(conn);
 		}
 		return retVal;
+	}
+
+	public void addLogut(int userId) {
+		Connection conn = null;
+		PreparedStatement ps =null;
+		
+		String query = "update login set logoutTime=current_timestamp() where userId=? and logoutTime is null";
+		
+		try {
+			conn = ConnectionPool.getConnectionPool().checkOut();
+			ps = conn.prepareStatement(query);
+			ps.setInt(1, userId);
+			
+			ps.executeUpdate();
+			
+			ps.close();
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionPool.getConnectionPool().checkIn(conn);
+		}
+		
 	}
 }

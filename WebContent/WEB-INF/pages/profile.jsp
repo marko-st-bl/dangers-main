@@ -102,7 +102,7 @@ if(profileUpdateResult == null){
 					</div>
 				</div>
 				<div class="form-group row justify-content-center">
-					<div class="form-control col-md-6 col-lg-5">
+					<div class="form-control col-md-6 col-lg-5 align-items-left">
 						<input type="checkbox" id="subscribeApp" name="notification"
 							value="notificationApp" /> <label for="subscribeApp">Send
 							me notifications in app.</label>

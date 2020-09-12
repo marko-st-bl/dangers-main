@@ -31,6 +31,8 @@ public class UserDAO {
 						rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10), rs.getString(11),
 						rs.getTimestamp(12), rs.getBoolean(13), rs.getBoolean(14)));
 			}
+			
+			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally{
@@ -57,6 +59,8 @@ public class UserDAO {
 			if(rs.next()) {
 				retVal = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4));
 			}
+			
+			ps.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -87,6 +91,8 @@ public class UserDAO {
 						rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10),
 						rs.getString(11), rs.getTimestamp(12), rs.getBoolean(13), rs.getBoolean(14));
 			}
+			
+			ps.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -136,6 +142,8 @@ public class UserDAO {
 			if(rs.next()) {
 				retVal = true;
 			}
+			
+			ps.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -161,6 +169,8 @@ public class UserDAO {
 			if(rs.next()) {
 				retVal = true;
 			}
+			
+			ps.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -204,6 +214,8 @@ public class UserDAO {
 			ps.setBoolean(11, user.isNotificationEmail());
 			ps.setInt(12, user.getId());
 			retVal = ps.executeUpdate() == 1;
+			
+			ps.close();
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}finally {

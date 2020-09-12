@@ -36,8 +36,8 @@
 				id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto">
 					<li class="nav-item"><a href="#" class="nav-link">Home</a></li>
-					<li class="nav-item"><a href="#" class="nav-link">Profile</a>
-					</li>
+					<li class="nav-item"><a href="#" class="nav-link">Profile</a></li>
+					<li class="nav-item"><a href="#" class="nav-link">Warn</a></li>
 					<li class="nav-item"><a href="?action=logout" class="nav-link">Logout</a>
 					</li>
 				</ul>
@@ -52,9 +52,18 @@
 					<img class="rounded-circle"
 						src="<%=userBean.getUser().getAvatar()%>" />
 				</div>
-				<div id="firstName" class="row justify-content-center"><%=userBean.getUser().getFirstName()%></div>
-				<div id="lastName" class="row justify-content-center"><%=userBean.getUser().getLastName()%></div>
-				<div class="row justify-content-center text-muted" id="numOfLogin"><%=userBean.getNumOfLogins()%></div>
+				<div id="firstName" class="row justify-content-center">
+					<h5><%=userBean.getUser().getFirstName()%></h5>
+				</div>
+				<div id="lastName" class="row justify-content-center">
+					<h5><%=userBean.getUser().getLastName()%></h5>
+				</div>
+				<div class="row justify-content-center text-muted" id="numOfLogin">Number of logins <%=userBean.getNumOfLogins()%></div>
+				<div class="row py-2 text-primary">
+					<h5>Notifications</h5>
+				</div>
+				<div class="notifications-container">
+				</div>
 			</div>
 			<!--MAIN-->
 			<div class="posts-container col-sm-9 col-md-8">

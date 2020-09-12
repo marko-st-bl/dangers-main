@@ -45,6 +45,7 @@ public class Controller extends HttpServlet {
 		String address = "/WEB-INF/pages/index.jsp";
 		String action = request.getParameter("action");
 		HttpSession session = request.getSession();
+		session.setMaxInactiveInterval(60*30);
 
 		if (action == null || action.equals("")) {
 			address = "/WEB-INF/pages/index.jsp";
@@ -203,6 +204,8 @@ public class Controller extends HttpServlet {
 			 */
 			else if(action.equals("logout")) {
 				session.invalidate();
+				UserBean userBean = (UserBean) session.getAttribute("userBean");
+				userBean.logut();
 				address = "WEB-INF/pages/index.html";
 				
 			}
