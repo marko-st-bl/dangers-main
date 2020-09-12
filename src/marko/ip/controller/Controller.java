@@ -45,7 +45,7 @@ public class Controller extends HttpServlet {
 		String address = "/WEB-INF/pages/index.jsp";
 		String action = request.getParameter("action");
 		HttpSession session = request.getSession();
-		session.setMaxInactiveInterval(60*30);
+		session.setMaxInactiveInterval(60 * 30);
 
 		if (action == null || action.equals("")) {
 			address = "/WEB-INF/pages/index.jsp";
@@ -57,11 +57,25 @@ public class Controller extends HttpServlet {
 			String username = request.getParameter("username");
 			String password = request.getParameter("password");
 			UserBean userBean = new UserBean();
-			System.out.println("Login attempt with username: " + username);
+			System.out.println("login");
 			if (userBean.login(username, password)) {
 				session.setAttribute("userBean", userBean);
 				address = "/WEB-INF/pages/home.jsp";
 			}
+		}
+		/*
+		 * LOGOUT
+		 */
+		else if (action.equals("logout")) {
+			System.out.println("logut");
+			UserBean userBean = (UserBean) session.getAttribute("userBean");
+			System.out.println("OUT" + userBean.getUser().getId());
+			if (userBean != null) {
+				userBean.logut();
+			}
+			session.invalidate();
+			address = "/WEB-INF/pages/index.jsp";
+
 		}
 		/*
 		 * REGISTER
@@ -79,15 +93,16 @@ public class Controller extends HttpServlet {
 			String password1 = request.getParameter("password1");
 			String password2 = request.getParameter("password2");
 			String email = request.getParameter("email");
-			
-			String registerResultMessage = FormValidator.validateRegisterForm(firstName, lastName, username, password1, password2, email);
+
+			String registerResultMessage = FormValidator.validateRegisterForm(firstName, lastName, username, password1,
+					password2, email);
 			UserBean userBean = new UserBean();
 			User newUser = new User(firstName, lastName, username, password1, email);
 			userBean.setUser(newUser);
 			session.setAttribute("userBean", userBean);
 			if (registerResultMessage.equals("OK")) {
 				if (!(userBean.isUsernameUsed(username))) {
-					if(!(userBean.isEmailUsed(email))) {
+					if (!(userBean.isEmailUsed(email))) {
 						if (userBean.addUser()) {
 							System.out.println(newUser.getUsername() + " succesfully registered.");
 							userBean.readUser();
@@ -137,7 +152,7 @@ public class Controller extends HttpServlet {
 				}
 			}
 			String profileUpdateResult = FormValidator.validateProfileForm(firstName, lastName, username, email);
-			if(profileUpdateResult.equals("OK")) {
+			if (profileUpdateResult.equals("OK")) {
 				Part imgPart = request.getPart("img");
 				InputStream input = imgPart.getInputStream();
 				if (imgPart.getSubmittedFileName().equals("")) {
@@ -158,28 +173,29 @@ public class Controller extends HttpServlet {
 					input.close();
 				}
 				UserBean userBean = (UserBean) session.getAttribute("userBean");
-				if(!oldPassword.equals("")) {
+				if (!oldPassword.equals("")) {
 					userBean.getUser().setPassword(oldPassword);
 					userBean.readUser();
-					if(userBean.getUser() == null) {
+					if (userBean.getUser() == null) {
 						profileUpdateResult = "Wrong password.";
 					} else {
-						if(!(password1.equals(password2))){
+						if (!(password1.equals(password2))) {
 							profileUpdateResult = "Passwords dont match.";
 						}
 					}
 				}
-				if(!(username.equals(userBean.getUser().getUsername()))) {
-					if(!(new UserBean().isUsernameUsed(username))) {
+				if (!(username.equals(userBean.getUser().getUsername()))) {
+					if (!(new UserBean().isUsernameUsed(username))) {
 						userBean.getUser().setUsername(username);
-					}else {
+					} else {
 						profileUpdateResult = "Username is already used.";
 					}
 				}
-				if(!(email.equals(userBean.getUser().getEmail()))) {
-					if(!(new UserBean().isEmailUsed(email))) {
-						userBean.getUser().setEmail(email);;
-					}else {
+				if (!(email.equals(userBean.getUser().getEmail()))) {
+					if (!(new UserBean().isEmailUsed(email))) {
+						userBean.getUser().setEmail(email);
+						;
+					} else {
 						profileUpdateResult = "Username is already used.";
 					}
 				}
@@ -198,18 +214,7 @@ public class Controller extends HttpServlet {
 				} else {
 					address = "WEB-INF/pages/profile.jsp";
 				}
-			}
-			/*
-			 * LOGOUT
-			 */
-			else if(action.equals("logout")) {
-				session.invalidate();
-				UserBean userBean = (UserBean) session.getAttribute("userBean");
-				userBean.logut();
-				address = "WEB-INF/pages/index.html";
-				
-			}
-			else {
+			} else {
 				address = "WEB-INF/pages/profile.jsp";
 			}
 			session.setAttribute("profileUpdateResult", profileUpdateResult);
