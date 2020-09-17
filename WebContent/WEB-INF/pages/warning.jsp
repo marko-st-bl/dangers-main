@@ -62,7 +62,7 @@ List<Category> categories = categoryBean.getAllCategories();
                     </div>
                 </div>
                 <div class="form-group row justify-content-center">
-                    <select multiple class="form-control col-md-6 col-lg-5" size="3">
+                    <select multiple class="form-control col-md-6 col-lg-5" name="category" size="3">
                         <%for(Category cat: categories){
                         	out.print("<option value=\"" + cat.getId() + "\">" + cat.getName() + "</option>");
                         }
@@ -71,7 +71,7 @@ List<Category> categories = categoryBean.getAllCategories();
                 </div>
                 <div class="row justify-content-center">
                     <div class="form-check col-md-6 col-lg-5">
-                        <input type="checkbox" class="form-check-input">
+                        <input type="checkbox" class="form-check-input" name="urgent">
                         <label class="form-check-label">Is Urgent?</label>
                     </div>
                 </div>

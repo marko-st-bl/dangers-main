@@ -115,6 +115,12 @@ public class Controller extends HttpServlet {
 			session.setAttribute("registerResultMessage", registerResultMessage);
 		}
 		/*
+		 * PROFILE PAGE
+		 */
+		else if(action.equals("profile")) {
+			address = "WEB-INF/pages/profile.jsp";
+		}
+		/*
 		 * UPDATE PROFILE
 		 */
 		else if (action.equals("updateUserProfile")) {
@@ -215,6 +221,18 @@ public class Controller extends HttpServlet {
 		 * WARNING
 		 */
 		else if(action.equals("warning")) {
+			address = "WEB-INF/pages/warning.jsp";
+		}
+		/*
+		 * ADD WARNING
+		 */
+		else if(action.equals("addWarning")) {
+			String[] categories =request.getParameterValues("category");
+			for(String s:categories) {
+				System.out.println(s);
+			}
+			System.out.println(request.getParameter("lat"));
+			System.out.println(request.getParameter("lng"));
 			address = "WEB-INF/pages/warning.jsp";
 		}
 		else {

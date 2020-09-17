@@ -37,5 +37,34 @@ public class CategoryDAO {
 		}
 		return retVal;
 	}
+	
+	public Category getCategoryById(int id) {
+		Category retVal = null;
+		Connection conn = null;
+		PreparedStatement ps =null;
+		ResultSet rs = null;
+		
+		String query = "select id, name "
+				+ "from categoty "
+				+ "where id=?";
+		
+		try {
+			conn = ConnectionPool.getConnectionPool().checkOut();
+			ps = conn.prepareStatement(query);
+			ps.setInt(1, id);
+			rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				retVal = new Category(rs.getInt(1), rs.getString(2));
+			}
+			
+			ps.close();
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionPool.getConnectionPool().checkIn(conn);
+		}
+		return retVal; 
+	}
 
 }
