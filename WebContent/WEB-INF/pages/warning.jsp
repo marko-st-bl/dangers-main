@@ -48,7 +48,7 @@
                 <h2 class="section-heading text-uppercase text-primary">Warn</h2>
                 <h3 class="section-subheading text-muted">You know about any threats?</h3>
             </div>
-            <form id="warn-form" action="" method="POST">
+            <form id="warn-form" action="?action=addWarning" method="POST">
                 <div class="row justify-content-center">
                     <div class="col-md-6 col-lg-5 py-2 text-muted">
                         Categories

@@ -9830,8 +9830,8 @@ img::-moz-selection {
   width: "100%";
 }
 
-#share-buttons {
-  justify-content: flex-end;
+.share-buttons-container {
+  padding-top: 1rem;
 }
 
 .forecast {
@@ -9873,6 +9873,19 @@ img::-moz-selection {
 
 .comment-form .btn {
   padding: 0;
+}
+
+.comment-avatar-container {
+  padding: 0;
+}
+
+.comment-author {
+  margin: 0;
+}
+
+#map {
+  height: 400px;
+  width: 100%;
 }
 
 header.masthead {

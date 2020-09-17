@@ -36,8 +36,8 @@
 				id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto">
 					<li class="nav-item"><a href="#" class="nav-link">Home</a></li>
-					<li class="nav-item"><a href="#" class="nav-link">Profile</a></li>
-					<li class="nav-item"><a href="#" class="nav-link">Warn</a></li>
+					<li class="nav-item"><a href="?action=profile" class="nav-link">Profile</a></li>
+					<li class="nav-item"><a href="?action=warning" class="nav-link">Warn</a></li>
 					<li class="nav-item"><a href="?action=logout" class="nav-link">Logout</a>
 					</li>
 				</ul>
