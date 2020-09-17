@@ -2,6 +2,7 @@ package marko.ip.dto;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Warning implements Serializable{
@@ -11,7 +12,7 @@ public class Warning implements Serializable{
 	 */
 	private static final long serialVersionUID = 832864386779749898L;
 	
-	private List<Category> categories;
+	private List<Category> categories = new ArrayList<>();
 	private boolean urgent;
 	private double lat;
 	private double lng;
@@ -20,6 +21,13 @@ public class Warning implements Serializable{
 	
 	public Warning() {
 		super();
+	}
+
+	public Warning(User user, double lat, double lng, boolean urgent) {
+		this.author = user;
+		this.lat = lat;
+		this.lng = lng;
+		this.urgent = urgent;
 	}
 
 	public List<Category> getCategories() {

@@ -45,7 +45,7 @@ public class CategoryDAO {
 		ResultSet rs = null;
 		
 		String query = "select id, name "
-				+ "from categoty "
+				+ "from danger_category "
 				+ "where id=?";
 		
 		try {

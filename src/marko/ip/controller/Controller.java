@@ -17,7 +17,10 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import marko.ip.beans.UserBean;
+import marko.ip.beans.WarningBean;
+import marko.ip.dao.CategoryDAO;
 import marko.ip.dto.User;
+import marko.ip.dto.Warning;
 import marko.ip.util.FormValidator;
 
 /**
@@ -227,12 +230,17 @@ public class Controller extends HttpServlet {
 		 * ADD WARNING
 		 */
 		else if(action.equals("addWarning")) {
+			WarningBean warningBean = new WarningBean();
+			double lat = Double.parseDouble(request.getParameter("lat"));
+			double lng = Double.parseDouble(request.getParameter("lng"));
+			String checked[] = request.getParameterValues("urgent");
+			boolean urgent = checked != null ? true : false;
+			warningBean.setWarning(new Warning(((UserBean)session.getAttribute("userBean")).getUser(), lat, lng, urgent));
 			String[] categories =request.getParameterValues("category");
-			for(String s:categories) {
-				System.out.println(s);
+			for(String catId:categories) {
+				warningBean.getWarning().getCategories().add(new CategoryDAO().getCategoryById(Integer.parseInt(catId)));
 			}
-			System.out.println(request.getParameter("lat"));
-			System.out.println(request.getParameter("lng"));
+			warningBean.addWarning();
 			address = "WEB-INF/pages/warning.jsp";
 		}
 		else {

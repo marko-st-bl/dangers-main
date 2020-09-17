@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import marko.ip.dto.Category;
 import marko.ip.dto.Warning;
@@ -18,11 +19,11 @@ public class WarningDAO {
 		ResultSet rs = null;
 		
 		String query = "insert into warning (userId, urgent, lat, lon) values (?, ?, ?, ?)";
-		String query1 = "insert into warning_has_danger_category () values(?, ?)";
+		String query1 = "insert into warning_has_danger_category (warningId, dangerCategoryId) values(?, ?)";
 		
 		try {
 			conn = ConnectionPool.getConnectionPool().checkOut();
-			ps = conn.prepareStatement(query);
+			ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			ps.setInt(1, warning.getAuthor().getId());
 			ps.setBoolean(2, warning.isUrgent());
 			ps.setDouble(3, warning.getLat());
