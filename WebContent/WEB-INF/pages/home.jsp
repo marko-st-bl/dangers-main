@@ -1,7 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@page import="java.util.List" %>
+<%@page import="marko.ip.dto.Warning" %>
+<%@page import="marko.ip.dto.Category" %>
 <jsp:useBean id="userBean" class="marko.ip.beans.UserBean"
 	scope="session" />
+<jsp:useBean id="warningBean" class="marko.ip.beans.WarningBean"
+	scope="session" />
+	<%
+	List<Warning> warnings= warningBean.getAllWarnings();
+	%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -47,7 +55,7 @@
 	<div id="main-page" class="container">
 		<div class="row">
 			<!--SIDEBAR-->
-			<div class="profile-sidebar col-sm-3 col-md-2 bg-light">
+			<div class="profile-sidebar col-sm-3 col-md-2">
 				<div class="avatar row justify-content-center">
 					<img class="rounded-circle"
 						src="<%=userBean.getUser().getAvatar()%>" />
@@ -59,10 +67,21 @@
 					<h5><%=userBean.getUser().getLastName()%></h5>
 				</div>
 				<div class="row justify-content-center text-muted" id="numOfLogin">Number of logins <%=userBean.getNumOfLogins()%></div>
-				<div class="row py-2 text-primary">
+				<div class="row p-2 text-primary">
 					<h5>Notifications</h5>
 				</div>
 				<div class="notifications-container">
+					<ul>
+					<%
+					for(Warning warning:warnings){
+						out.print("<li><span class=\"font-weight-bold\">" + warning.getAuthor().getFirstName()+" "+warning.getAuthor().getLastName()+" </span>");
+						for(Category cat: warning.getCategories()){
+							out.print(cat.getName() + " ");
+						}
+						out.print("<span class=\"text-muted\"> "+warning.getCreatedAt()+"</span></li>");
+					}
+					%>
+					</ul>
 				</div>
 			</div>
 			<!--MAIN-->

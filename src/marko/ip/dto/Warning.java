@@ -12,12 +12,13 @@ public class Warning implements Serializable{
 	 */
 	private static final long serialVersionUID = 832864386779749898L;
 	
-	private List<Category> categories = new ArrayList<>();
+	private int id;
 	private boolean urgent;
 	private double lat;
 	private double lng;
 	private Timestamp createdAt;
 	private User author;
+	private List<Category> categories = new ArrayList<>();
 	
 	public Warning() {
 		super();
@@ -27,6 +28,14 @@ public class Warning implements Serializable{
 		this.author = user;
 		this.lat = lat;
 		this.lng = lng;
+		this.urgent = urgent;
+	}
+
+	public Warning(int id, double lat, double lng, Timestamp createdAt, boolean urgent) {
+		this.id = id;
+		this.lat = lat;
+		this.lng = lng;
+		this.createdAt = createdAt;
 		this.urgent = urgent;
 	}
 
@@ -76,5 +85,13 @@ public class Warning implements Serializable{
 
 	public void setAuthor(User author) {
 		this.author = author;
+	}
+	
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
 	}
 }

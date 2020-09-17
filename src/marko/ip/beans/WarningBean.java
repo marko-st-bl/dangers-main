@@ -1,6 +1,7 @@
 package marko.ip.beans;
 
 import java.io.Serializable;
+import java.util.List;
 
 import marko.ip.dao.WarningDAO;
 import marko.ip.dto.Warning;
@@ -29,6 +30,10 @@ public class WarningBean implements Serializable{
 	
 	public boolean addWarning() {
 		return new WarningDAO().addWarning(warning);
+	}
+	
+	public List<Warning> getAllWarnings(){
+		return new WarningDAO().getAllWarnings();
 	}
 	
 

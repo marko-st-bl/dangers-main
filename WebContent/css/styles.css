@@ -9999,3 +9999,19 @@ header.hero .hero-subheading {
 #main-page {
   padding-top: 5rem;
 }
+
+.notifications-container ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.notifications-container ul li {
+  border-bottom: 1px solid #dddddd;
+  border-radius: 5px;
+  padding: 6px;
+}
+
+.notifications-container ul li:nth-of-type(odd) {
+  background-color: #e9e9f9;
+}

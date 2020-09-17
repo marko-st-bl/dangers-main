@@ -67,4 +67,33 @@ public class CategoryDAO {
 		return retVal; 
 	}
 
+	public List<Category> getCategoriesForWarning(int id) {
+		List<Category> retVal = new ArrayList<>();
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		String query = "select warningId, dangerCategoryId "
+				+ "from warning_has_danger_category "
+				+ "where warningId=?";
+		
+		try {
+			conn = ConnectionPool.getConnectionPool().checkOut();
+			ps = conn.prepareStatement(query);
+			ps.setInt(1, id);
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				retVal.add(getCategoryById(rs.getInt(2)));
+			}
+			
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally{
+			ConnectionPool.getConnectionPool().checkIn(conn);
+		}
+		return retVal;
+	}
+
 }
