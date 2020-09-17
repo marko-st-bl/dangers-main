@@ -1,5 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@page import="java.util.List" %>
+<%@page import="marko.ip.dto.Category" %>
+<jsp:useBean id="categoryBean" class="marko.ip.beans.CategoryBean"
+	scope="session" />
+<%
+List<Category> categories = categoryBean.getAllCategories();
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -56,11 +63,10 @@
                 </div>
                 <div class="form-group row justify-content-center">
                     <select multiple class="form-control col-md-6 col-lg-5" size="3">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
+                        <%for(Category cat: categories){
+                        	out.print("<option value=\"" + cat.getId() + "\">" + cat.getName() + "</option>");
+                        }
+                        %>
                     </select>
                 </div>
                 <div class="row justify-content-center">
