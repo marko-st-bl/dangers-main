@@ -2,7 +2,6 @@ package marko.ip.beans;
 
 import java.io.Serializable;
 
-import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
 
 import marko.ip.dao.LoginDAO;

@@ -210,7 +210,14 @@ public class Controller extends HttpServlet {
 				address = "WEB-INF/pages/profile.jsp";
 			}
 			session.setAttribute("profileUpdateResult", profileUpdateResult);
-		} else {
+		}
+		/*
+		 * WARNING
+		 */
+		else if(action.equals("warning")) {
+			address = "WEB-INF/pages/warning.jsp";
+		}
+		else {
 			address = "/WEB-INF/pages/index.jsp";
 		}
 		RequestDispatcher dispatcher = request.getRequestDispatcher(address);
