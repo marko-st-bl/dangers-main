@@ -36,5 +36,9 @@ public class WarningBean implements Serializable{
 		return new WarningDAO().getAllWarnings();
 	}
 	
+	public List<Warning> getUrgentWarnings(){
+		return new WarningDAO().getUrgentWarnings();
+	}
+	
 
 }

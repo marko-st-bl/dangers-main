@@ -161,7 +161,7 @@ public class Controller extends HttpServlet {
 				} else {
 					avatar = "http://127.0.0.1:8080/dangers-main/assets/img/avatar/" + username + ".jpg";
 					ByteArrayOutputStream out = new ByteArrayOutputStream();
-					String contextPath = getServletContext().getRealPath("/assets/img/");
+					String contextPath = getServletContext().getRealPath("/assets/img/avatar/");
 					System.out.println(contextPath);
 					byte[] buffer = new byte[1024 * 4];
 					int read;
@@ -231,11 +231,18 @@ public class Controller extends HttpServlet {
 		 */
 		else if(action.equals("addWarning")) {
 			WarningBean warningBean = new WarningBean();
-			double lat = Double.parseDouble(request.getParameter("lat"));
-			double lng = Double.parseDouble(request.getParameter("lng"));
+			String description = request.getParameter("description");
 			String checked[] = request.getParameterValues("urgent");
 			boolean urgent = checked != null ? true : false;
-			warningBean.setWarning(new Warning(((UserBean)session.getAttribute("userBean")).getUser(), lat, lng, urgent));
+			String lat = request.getParameter("lat");
+			String lon = request.getParameter("lng");
+			if(lat != null && !(lat.equals("")) && lon != null && !(lon.equals(""))) {
+				double latitude = Double.parseDouble(lat);
+				double longitude = Double.parseDouble(lon);
+				warningBean.setWarning(new Warning(((UserBean)session.getAttribute("userBean")).getUser(), latitude, longitude, urgent, description));
+			} else {
+				warningBean.setWarning(new Warning(((UserBean)session.getAttribute("userBean")).getUser(), urgent, description));
+			}
 			String[] categories =request.getParameterValues("category");
 			for(String catId:categories) {
 				warningBean.getWarning().getCategories().add(new CategoryDAO().getCategoryById(Integer.parseInt(catId)));

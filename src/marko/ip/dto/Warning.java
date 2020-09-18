@@ -2,6 +2,7 @@ package marko.ip.dto;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ public class Warning implements Serializable{
 	private static final long serialVersionUID = 832864386779749898L;
 	
 	private int id;
+	private String description;
 	private boolean urgent;
 	private double lat;
 	private double lng;
@@ -24,19 +26,27 @@ public class Warning implements Serializable{
 		super();
 	}
 
-	public Warning(User user, double lat, double lng, boolean urgent) {
+	public Warning(User user, double lat, double lng, boolean urgent, String description) {
 		this.author = user;
 		this.lat = lat;
 		this.lng = lng;
 		this.urgent = urgent;
+		this.description = description;
 	}
 
-	public Warning(int id, double lat, double lng, Timestamp createdAt, boolean urgent) {
+	public Warning(int id, double lat, double lng, Timestamp timestamp, boolean urgent, String description) {
 		this.id = id;
-		this.lat = lat;
+		this.lat= lat;
 		this.lng = lng;
-		this.createdAt = createdAt;
+		this.createdAt =timestamp;
 		this.urgent = urgent;
+		this.description = description;
+	}
+
+	public Warning(User user, boolean urgent, String description) {
+		this.author = user;
+		this.urgent=urgent;
+		this.description = description;
 	}
 
 	public List<Category> getCategories() {
@@ -93,5 +103,26 @@ public class Warning implements Serializable{
 	
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public String getDate() {
+		SimpleDateFormat sdf= new SimpleDateFormat("EEE,d MMM YYYY hh:mm");
+		return sdf.format(new java.util.Date(createdAt.getTime()));
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
+	public boolean isLocationSet() {
+		if(lat != 0 && lng != 0) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 }

@@ -1,15 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@page import="java.util.List" %>
-<%@page import="marko.ip.dto.Warning" %>
-<%@page import="marko.ip.dto.Category" %>
+<%@page import="java.util.List"%>
+<%@page import="marko.ip.dto.Warning"%>
+<%@page import="marko.ip.dto.Category"%>
 <jsp:useBean id="userBean" class="marko.ip.beans.UserBean"
 	scope="session" />
 <jsp:useBean id="warningBean" class="marko.ip.beans.WarningBean"
 	scope="session" />
-	<%
-	List<Warning> warnings= warningBean.getAllWarnings();
-	%>
+<%
+	List<Warning> warnings = warningBean.getAllWarnings();
+%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -43,9 +43,11 @@
 			<div class="collapse navbar-collapse ml-auto"
 				id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto">
-					<li class="nav-item"><a href="#" class="nav-link">Home</a></li>
-					<li class="nav-item"><a href="?action=profile" class="nav-link">Profile</a></li>
-					<li class="nav-item"><a href="?action=warning" class="nav-link">Warn</a></li>
+					<li class="nav-item"><a href="?action=home" class="nav-link">Home</a></li>
+					<li class="nav-item"><a href="?action=profile"
+						class="nav-link">Profile</a></li>
+					<li class="nav-item"><a href="?action=warning"
+						class="nav-link">Warn</a></li>
 					<li class="nav-item"><a href="?action=logout" class="nav-link">Logout</a>
 					</li>
 				</ul>
@@ -55,7 +57,7 @@
 	<div id="main-page" class="container">
 		<div class="row">
 			<!--SIDEBAR-->
-			<div class="profile-sidebar col-sm-3 col-md-2">
+			<div class="profile-sidebar col-md-4 col-lg-3">
 				<div class="avatar row justify-content-center">
 					<img class="rounded-circle"
 						src="<%=userBean.getUser().getAvatar()%>" />
@@ -66,26 +68,47 @@
 				<div id="lastName" class="row justify-content-center">
 					<h5><%=userBean.getUser().getLastName()%></h5>
 				</div>
-				<div class="row justify-content-center text-muted" id="numOfLogin">Number of logins <%=userBean.getNumOfLogins()%></div>
+				<div class="row justify-content-center text-muted" id="numOfLogin">
+					Number of logins
+					<%=userBean.getNumOfLogins()%></div>
 				<div class="row p-2 text-primary">
 					<h5>Notifications</h5>
 				</div>
 				<div class="notifications-container">
-					<ul>
+					<div id="warn-list" class="list-group">
 					<%
-					for(Warning warning:warnings){
-						out.print("<li><span class=\"font-weight-bold\">" + warning.getAuthor().getFirstName()+" "+warning.getAuthor().getLastName()+" </span>");
-						for(Category cat: warning.getCategories()){
-							out.print(cat.getName() + " ");
+						for(Warning warn:warningBean.getAllWarnings()){
+							out.print("<a id=\"warn-"+warn.getId()+"\"");
+							if(warn.isLocationSet()){
+								out.print("target=\"_blank\" href=\"https://www.google.com/maps/@" +warn.getLat() +","+ warn.getLng()+",15z\"");
+							}else{
+								out.print("href=\"#\"");
+							}						
+							out.print("class=\"list-group-item list-group-item-action flex-column align-items-start\">"
+							+ "<div class=\"d-flex w-100 justify-content-between\">"
+							+	"<h5 class=\"mb-1\">");
+							for(Category cat:warn.getCategories()){
+								out.print(cat.getName() + " ");
+							}
+							out.print("</h5>");
+							if(warn.isLocationSet()){
+								out.print("<i class=\"fas fa-map-marker-alt\"></i>");
+							}
+								
+							out.print("</div>"
+							+"<p class=\"mb-1\">");
+							out.print(warn.getDescription()
+							+"</p> <small>"
+							+ warn.getDate() 
+							+ "</small>"
+							+ "</a>");
 						}
-						out.print("<span class=\"text-muted\"> "+warning.getCreatedAt()+"</span></li>");
-					}
-					%>
-					</ul>
+						%>
+					</div>
 				</div>
 			</div>
 			<!--MAIN-->
-			<div class="posts-container col-sm-9 col-md-8">
+			<div class="posts-container col-md-8 col-lg-7">
 				<!--POST-FORM-->
 				<div class="post-form-container">
 					<div class="post-form-header">
@@ -150,7 +173,7 @@
 				<div class="posts"></div>
 			</div>
 			<!--WEATHER-->
-			<div class=" col-sm-12 col-md-2">
+			<div class="col-lg-2">
 				<div class="forecast">
 					<div class="row justify-content-center">
 						<div class="cityName" id="cityName1"></div>
@@ -201,7 +224,7 @@
 
         //LOAD FORECAST
         document.body.onload = loadForecast();
-        let country = "<%=userBean.getUser().getCountry()%>";
+        let country = "<%= userBean.getUser().getCountry() %>";
 	let countries;
 	let lon;
 	let lat;
@@ -214,7 +237,7 @@
 			if (this.status == 200) {
 				countries = JSON.parse(this.responseText);
 				let output = '';
-				for ( let i in countries) { 
+				for ( let i in countries) {
 					if (countries[i].name == country) {
 						lat = countries[i].latlng[0];
 						lon = countries[i].latlng[1];
@@ -297,12 +320,54 @@
 					document.getElementById('video-preview').src = "";
 				}
 			});
+	// LOAD WARNINGS
+	$(document).ready(function(){
+		setInterval(loadWarnings, 5000);
+	});
 
 	// LOAD POSTS
 	$(document).ready(function() {
 		loadPosts();
 		setInterval(loadPosts, 30000);
 	});
+	
+	function loadWarnings(){
+		$.ajax({
+			url: 'http://localhost:8080/dangers-main/warnings',
+			type: 'get'
+		}).done(function(warnings){
+			console.log(warnings);
+			if(warnings){
+				for(let i in warnings){
+					let output='';
+					if($('#warn-' + warnings[i].id).length == 0){
+						output+= '<a id="warn-'+warnings[i].id+'"';
+						if(warnings[i].lat && warnings[i].lng){
+							output+= 'target="_blank" href="https://www.google.com/maps/@'+warnings[i].lat+','+warnings[i].lng+',15z"';
+						}else{
+							output+= 'href"#';
+						}
+						output+= 'class="list-group-item list-group-item-action flex-column align-items-start">';
+						output+= '<div class="d-flex w-100 justify-content-between">';
+						output+= '<h5 class="mb-1">';
+						for(let j in warnings[i].categories){
+							output+=warnings[i].categories[j].name + " ";
+						}
+						output+= '</h5>';
+						if(warnings[i].lat && warnings[i].lng){
+							output+= '<i class="fas fa-map-marker-alt"></i>'
+						}
+						output+= '</div>';
+						output+= '<p class="mb-1">' + warnings[i].description + '</p>';
+						output+='<small>'+warnings[i].createdAt+ '</small>';
+						output+= '</a>';
+						$('#warn-list').prepend(output);
+						
+					}
+				}
+			}
+		});
+	}
 
 	function loadPosts() {
 		$
@@ -312,7 +377,7 @@
 				})
 				.done(
 						function(posts) {
-							console.log(posts);
+							//console.log(posts);
 							for ( let i in posts) {
 								let output = '';
 								if ($('#post-' + posts[i].id).length == 0
@@ -357,32 +422,41 @@
 											+ '<button id="comments-btn-'+posts[i].id+'" class="post-button btn col-6" type="button"><i class="far fa-comments"></i> Comments</button>'
 											+ '</div>'
 											+ '<div class="share-buttons-container row justify-content-end">'
-											+ '<iframe id="tweet-button" allowtransparency="true" frameborder="0" scrolling="no" src="http://platform.twitter.com/widgets/tweet_button.html?via=&amp;text='+posts[i].url+'&amp;count=horizontal" style="width:110px; height:20px;"></iframe>'
-											+ '<iframe id="share-button" src="https://www.facebook.com/plugins/share_button.php?href='+posts[i].url+'&layout=button&size=small&width=67&height=20&appId" width="67" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" allow="encrypted-media"></iframe>'
+											+ '<iframe id="tweet-button" allowtransparency="true" frameborder="0" scrolling="no" src="http://platform.twitter.com/widgets/tweet_button.html?via=&amp;text='
+											+ posts[i].url
+											+ '&amp;count=horizontal" style="width:110px; height:20px;"></iframe>'
+											+ '<iframe id="share-button" src="https://www.facebook.com/plugins/share_button.php?href='
+											+ posts[i].url
+											+ '&layout=button&size=small&width=67&height=20&appId" width="67" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" allow="encrypted-media"></iframe>'
 											+ '</div>'
 											+ '<div id="comments-'+posts[i].id+'" class="comments py-2" style="display: none">';
-									for(let j in posts[i].comments){
-										output+=
-											 '<div class="row">'
-											+ 	'<div class="comment-avatar-container col-2 col-lg-1">'
-											+ 		'<img class="comment-avatar rounded-circle" src="'+posts[i].comments[j].author.avatar+'" alt="">'
-											+ 	'</div>'
-											+ 	'<div class="col-10 col-lg-11">'
-											+ 		'<div class="p-2 bg-light">'
-											+ 			'<h6 class="comment-author">'+posts[i].comments[j].author.firstName+ ' ' +posts[i].comments[j].author.lastName+ '</h6>'
-											+ 			'<p class="comment-text">'+posts[i].comments[j].text+'</p>'
-											+ 		'</div>';
-											if(posts[i].comments[j]['url']){
-												console.log('PICTURE');
-												output+= '<img src="'+posts[i].comments[j].url+'" alt="" width="100%">';
-											}
-											output+='</div>'
-											+'</div>';
-											
+									for ( let j in posts[i].comments) {
+										output += '<div class="row">'
+												+ '<div class="comment-avatar-container col-2 col-lg-1">'
+												+ '<img class="comment-avatar rounded-circle" src="'+posts[i].comments[j].author.avatar+'" alt="">'
+												+ '</div>'
+												+ '<div class="col-10 col-lg-11">'
+												+ '<div class="p-2 bg-light">'
+												+ '<h6 class="comment-author">'
+												+ posts[i].comments[j].author.firstName
+												+ ' '
+												+ posts[i].comments[j].author.lastName
+												+ '</h6>'
+												+ '<p class="comment-text">'
+												+ posts[i].comments[j].text
+												+ '</p>' + '</div>';
+										if (posts[i].comments[j]['url']) {
+											console.log('PICTURE');
+											output += '<img src="'
+													+ posts[i].comments[j].url
+													+ '" alt="" width="100%">';
+										}
+										output += '</div>' + '</div>';
+
 									}
-									output+= '</div>';
-											
-											output+= '<div id="comment-container-'+posts[i].id+'" class="new-comment-container row align-items-center" style="display: none">'
+									output += '</div>';
+
+									output += '<div id="comment-container-'+posts[i].id+'" class="new-comment-container row align-items-center" style="display: none">'
 											+ '<div class="p-1 col-2">'
 											+ '<img class="rounded-circle comment-avatar" src="'+ posts[i].owner.avatar +'">'
 											+ '</div>'
@@ -395,19 +469,25 @@
 											+ '<input id="comment-img-input-'+ posts[i].id +'" type="file" name="image" accept="image/*" style="display: none"/>'
 											+ '<input type="text" name="postId" value="' + posts[i].id +'" style="display: none"/>'
 											+ '<button id="btn-'+ posts[i].id +'" type="submit" style="display: none"></button>'
-											+ '</form>' + '</div>' + '<div>'
+											+ '</form>'
+											+ '</div>'
+											+ '<div>'
 											+ '<div class="row">'
 											+ '<img id="comment-img-preview-'
 											+ posts[i].id
 											+ '" src="" width="100%">'
-											+ '</div>' + '</div>' + '</div>'
+											+ '</div>'
+											+ '</div>'
+											+ '</div>'
 											+ '</div>';
 
 									$('.posts').prepend(output);
-									
-									$('#comments-btn-'+posts[i].id).click(function(){
-										$('#comments-'+posts[i].id).toggle();
-									});
+
+									$('#comments-btn-' + posts[i].id).click(
+											function() {
+												$('#comments-' + posts[i].id)
+														.toggle();
+											});
 
 									$('#comment-btn-' + posts[i].id).click(
 											function() {
@@ -487,39 +567,59 @@
 																.done(
 																		function(
 																				response) {
-																			$('#form-' + posts[i].id).each(function(){
-																				this.reset();
-																			});
-																			$('#comment-img-preview-'+posts[i].id).attr('src', '');
+																			$(
+																					'#form-'
+																							+ posts[i].id)
+																					.each(
+																							function() {
+																								this
+																										.reset();
+																							});
+																			$(
+																					'#comment-img-preview-'
+																							+ posts[i].id)
+																					.attr(
+																							'src',
+																							'');
 																		});
 													});
-									$('#share-btn-'+posts[i].id).click(function(){
-										$('#share-buttons-'+posts[i].id).toggle();
-									});
+									$('#share-btn-' + posts[i].id).click(
+											function() {
+												$(
+														'#share-buttons-'
+																+ posts[i].id)
+														.toggle();
+											});
 								} else if ($("#post-" + posts[i].id).length !== 0
-										&& posts[i].type !== "rss"){
-									$('#comments-'+posts[i].id).empty();
-									let output='';
-									for(let j in posts[i].comments){
-										output+=
-											 '<div class="row">'
-											+ 	'<div class="comment-avatar-container col-2 col-lg-1">'
-											+ 		'<img class="comment-avatar rounded-circle" src="'+posts[i].comments[j].author.avatar+'" alt="">'
-											+ 	'</div>'
-											+ 	'<div class="col-10 col-lg-11">'
-											+ 		'<div class="p-2 bg-light">'
-											+ 			'<h6 class="comment-author">'+posts[i].comments[j].author.firstName+ ' ' +posts[i].comments[j].author.lastName+ '</h6>'
-											+ 			'<p class="comment-text">'+posts[i].comments[j].text+'</p>'
-											+ 		'</div>';
-											if(posts[i].comments[j]['url']){
-												output+= '<img src="'+posts[i].comments[j].url+'" alt="" width="100%">';
-											}
-											output+='</div>'
-											+'</div>';
+										&& posts[i].type !== "rss") {
+									$('#comments-' + posts[i].id).empty();
+									let output = '';
+									for ( let j in posts[i].comments) {
+										output += '<div class="row">'
+												+ '<div class="comment-avatar-container col-2 col-lg-1">'
+												+ '<img class="comment-avatar rounded-circle" src="'+posts[i].comments[j].author.avatar+'" alt="">'
+												+ '</div>'
+												+ '<div class="col-10 col-lg-11">'
+												+ '<div class="p-2 bg-light">'
+												+ '<h6 class="comment-author">'
+												+ posts[i].comments[j].author.firstName
+												+ ' '
+												+ posts[i].comments[j].author.lastName
+												+ '</h6>'
+												+ '<p class="comment-text">'
+												+ posts[i].comments[j].text
+												+ '</p>' + '</div>';
+										if (posts[i].comments[j]['url']) {
+											output += '<img src="'
+													+ posts[i].comments[j].url
+													+ '" alt="" width="100%">';
+										}
+										output += '</div>' + '</div>';
 									}
-									output+='</div>';
-									$('#comments-'+posts[i].id).append(output);
-									
+									output += '</div>';
+									$('#comments-' + posts[i].id)
+											.append(output);
+
 								} else if ($("#post" + posts[i].guid).length == 0
 										&& posts[i].type == "rss") {
 									$('.posts')
@@ -544,19 +644,7 @@
 						});
 	}
 
-	/*         //GET POSTS
-	 /document.body.onload = getPosts();
-	 function getPosts(){
-	 let xhr = new XMLHttpRequest();
-	 xhr.open('GET', 'http://localhost:8080/dangers-main/Posts', 'true');
-	 xhr.onload = function(){
-	 if(this.status == 200){
-	 let posts = JSON.parse(this.responseText);
-	 console.log(posts);
-	 }
-	 }
-	 xhr.send();
-	 } */
+
 	//TOGGLE POST FORM
 	$('#yt-btn').click(function() {
 		$('#youtube-input').toggle();

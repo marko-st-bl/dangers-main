@@ -40,9 +40,9 @@ List<Category> categories = categoryBean.getAllCategories();
             </button>
             <div class="collapse navbar-collapse ml-auto" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item"><a href="#" class="nav-link">Home</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Profile</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Warn</a></li>
+                    <li class="nav-item"><a href="?action=home" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="?action=profile" class="nav-link">Profile</a></li>
+                    <li class="nav-item"><a href="?action=warning" class="nav-link">Warn</a></li>
                     <li class="nav-item"><a href="?action=logout" class="nav-link">Logout</a>
                     </li>
                 </ul>
@@ -56,8 +56,17 @@ List<Category> categories = categoryBean.getAllCategories();
                 <h3 class="section-subheading text-muted">You know about any threats?</h3>
             </div>
             <form id="warn-form" action="?action=addWarning" method="POST">
+            <div class="row justify-content-center">
+            	<div class="col-md-6 col-lg-5 text-muted">
+            		Description
+            	</div>
+            </div>
+            <div class="form-group row justify-content-center">
+            	<input class="form-control col-md-6 col-lg-5" name="description" type="text"/>
+            </div>
+            
                 <div class="row justify-content-center">
-                    <div class="col-md-6 col-lg-5 py-2 text-muted">
+                    <div class="col-md-6 col-lg-5 text-muted">
                         Categories
                     </div>
                 </div>

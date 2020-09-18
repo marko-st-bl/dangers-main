@@ -10008,10 +10008,10 @@ header.hero .hero-subheading {
 
 .notifications-container ul li {
   border-bottom: 1px solid #dddddd;
-  border-radius: 5px;
   padding: 6px;
 }
 
 .notifications-container ul li:nth-of-type(odd) {
   background-color: #e9e9f9;
 }
+

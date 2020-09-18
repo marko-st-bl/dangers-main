@@ -20,7 +20,7 @@ public class WarningDAO {
 		PreparedStatement ps1 = null;
 		ResultSet rs = null;
 		
-		String query = "insert into warning (userId, urgent, lat, lon) values (?, ?, ?, ?)";
+		String query = "insert into warning (userId, urgent, lat, lon, description) values (?, ?, ?, ?, ?)";
 		String query1 = "insert into warning_has_danger_category (warningId, dangerCategoryId) values(?, ?)";
 		
 		try {
@@ -30,6 +30,7 @@ public class WarningDAO {
 			ps.setBoolean(2, warning.isUrgent());
 			ps.setDouble(3, warning.getLat());
 			ps.setDouble(4, warning.getLng());
+			ps.setString(5, warning.getDescription());
 			retVal = ps.executeUpdate() == 1;
 			rs = ps.getGeneratedKeys();
 			rs.next();
@@ -56,7 +57,7 @@ public class WarningDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
-		String query = "select id, userId, lat, lon, createdAt, urgent "
+		String query = "select id, userId, lat, lon, createdAt, urgent, description "
 				+ "from warning";
 		
 		try {
@@ -66,7 +67,7 @@ public class WarningDAO {
 			
 			while(rs.next()) {
 				Warning warning = new Warning(rs.getInt(1), rs.getDouble(3), rs.getDouble(4), 
-						rs.getTimestamp(5), rs.getBoolean(6));
+						rs.getTimestamp(5), rs.getBoolean(6), rs.getString(7));
 				warning.setAuthor(new UserDAO().getUserById(rs.getInt(2)));
 				warning.setCategories(new CategoryDAO().getCategoriesForWarning(rs.getInt(1)));
 				retVal.add(warning);
@@ -108,6 +109,38 @@ public class WarningDAO {
 			ConnectionPool.getConnectionPool().checkIn(conn);
 		}
 		return retVal; 
+	}
+
+	public List<Warning> getUrgentWarnings() {
+		List<Warning> retVal = new ArrayList<>();
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		String query = "select id, userId, lat, lon, createdAt, urgent, description "
+				+ "from warning "
+				+ "where urgent=1";
+		
+		try {
+			conn = ConnectionPool.getConnectionPool().checkOut();
+			ps = conn.prepareStatement(query);
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				Warning warning = new Warning(rs.getInt(1), rs.getDouble(3), rs.getDouble(4), 
+						rs.getTimestamp(5), rs.getBoolean(6), rs.getString(7));
+				warning.setAuthor(new UserDAO().getUserById(rs.getInt(2)));
+				warning.setCategories(new CategoryDAO().getCategoriesForWarning(rs.getInt(1)));
+				retVal.add(warning);
+			}
+			
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally{
+			ConnectionPool.getConnectionPool().checkIn(conn);
+		}
+		return retVal;
 	}
 
 }
