@@ -110,7 +110,7 @@
 			<!--MAIN-->
 			<div class="posts-container col-md-8 col-lg-7">
 				<!--POST-FORM-->
-				<div class="post-form-container">
+				<div class="post-form-container border rounded">
 					<div class="post-form-header">
 						<h3 class="text-primary">Add new post...</h3>
 					</div>
@@ -381,8 +381,8 @@
 							for ( let i in posts) {
 								let output = '';
 								if ($('#post-' + posts[i].id).length == 0
-										&& posts[i].type !== "rss") {
-									output += '<div id="post-'+posts[i].id+'" class="post my-1">'
+										&& posts[i].type != "rss") {
+									output += '<div id="post-'+posts[i].id+'" class="post border rounded my-1">'
 											+ '<div class="row align-items-center">'
 											+ '<img class="avatar rounded-circle" src="' + posts[i].owner.avatar +'" alt="">'
 											+ '<h5 class="p-2">'
@@ -624,7 +624,7 @@
 										&& posts[i].type == "rss") {
 									$('.posts')
 											.prepend(
-													'<div id="post'+posts[i].guid+'" class="post my-1">'
+													'<div id="post'+posts[i].guid+'" class="post border rounded my-1">'
 															+ '<div class="row">'
 															+ '<h5 class="pl-2">'
 															+ posts[i].title

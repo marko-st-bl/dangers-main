@@ -9803,10 +9803,6 @@ img::-moz-selection {
   padding: 1rem;
 }
 
-.post-form-container {
-  border-style: solid;
-  border-color: #f8f9fa;
-}
 
 .posts {
   padding-top: 2rem;
@@ -9814,8 +9810,6 @@ img::-moz-selection {
 
 .post {
   padding: 1rem;
-  border-style: solid;
-  border-color: #f8f9fa;
 }
 
 .post .avatar {
@@ -9853,9 +9847,6 @@ img::-moz-selection {
 }
 
 .comment-form {
-  border-style: solid;
-  border-radius: 5px;
-  border-color: #f8f9fa;
   margin: 0;
   padding: 0;
 }
