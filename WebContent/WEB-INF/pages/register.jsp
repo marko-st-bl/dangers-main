@@ -15,7 +15,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Danger Info</title>
-    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="./css/styles.css" />
+    <script src="./js/validateRegisterForm.js"></script>
 </head>
 
 <body class="bg-light">
@@ -26,32 +27,27 @@
                 <h2 class="section-heading text-uppercase text-primary">Register</h2>
                 <h3 class="section-subheading text-muted">Please fill up the form with your info.</h3>
             </div>
-            <form id="registerForm" action="?action=registerUser" method="POST">
+            <form id="registerForm" onsubmit="return validateForm()" action="?action=registerUser" method="POST" novalidate>
                 <div class=" row justify-content-center form-group">
-                    <input class="form-control col-md-6 col-lg-5" id="fname" type="text" placeholder="First Name " name="firstName"
-                        required="required"/>
+                    <input class="form-control col-md-6 col-lg-5" id="fname" type="text" placeholder="First Name " name="firstName" required/>
                 </div>
                 <div class="row justify-content-center form-group">
-                    <input class="form-control col-md-6 col-lg-5" id="lname" type="text" placeholder="Last Name " name="lastName"
-                        required="required"/>
+                    <input class="form-control col-md-6 col-lg-5" id="lname" type="text" placeholder="Last Name " name="lastName" required/>
                 </div>
                 <div class="form-group row justify-content-center">
-                    <input class="form-control col-md-6 col-lg-5" id="username" type="text" placeholder="Username " name="username"
-                        required="required"/>
+                    <input class="form-control col-md-6 col-lg-5" id="username" type="text" placeholder="Username " name="username" required/>
                 </div>
                 <div class="form-group row justify-content-center">
-                    <input class="form-control col-md-6 col-lg-5" id="email" type="email" placeholder="Email " name="email"
-                        required="required"/>
+                    <input class="form-control col-md-6 col-lg-5" id="email" type="email" placeholder="Email " name="email"/>
                 </div>
                 <div class="form-group row justify-content-center">
-                    <input class="form-control col-md-6 col-lg-5" id="password1" type="password" placeholder="Password " name="password1"
-                        required="required"/>
+                    <input class="form-control col-md-6 col-lg-5" id="password1" type="password" placeholder="Password " name="password1" required/>
                 </div>
                 <div class="form-group row justify-content-center">
-                    <input class="form-control col-md-6 col-lg-5" id="password2" type="password" placeholder="Repeat Password "
-                        name="password2" required="required"/>
+                    <input class="form-control col-md-6 col-lg-5" id="password2" type="password" placeholder="Repeat Password " required
+                        name="password2"/>
                 </div>
-                <p id="res" class="row help-block justify-content-center text-danger"><%= registerResponseMessage %></p>
+                <p id="validationResult" class="row help-block justify-content-center text-center text-danger"><%= registerResponseMessage %></p>
                 <div class="text-center">
                     <div id="success"></div>
                     <button class="btn btn-primary btn-xl text-uppercase" id="registerButton"
