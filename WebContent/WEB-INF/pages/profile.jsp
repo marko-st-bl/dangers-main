@@ -17,6 +17,7 @@ if(profileUpdateResult == null){
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DangerInfo - Profile</title>
 <link rel="stylesheet" href="css/styles.css" />
+<script src="./js/validateProfileForm.js"></script>
 </head>
 
 <body>
@@ -28,88 +29,87 @@ if(profileUpdateResult == null){
 				<h3 class="section-subheading text-muted">Please fill up the
 					form with your info.</h3>
 			</div>
-			<form id="registerForm" action="?action=updateUserProfile"
-				method="POST" enctype="multipart/form-data">
+			<div class="row justify-content-center align-items-center">
+				<div class="col-md-6 col-lg-5">				
+			<form id="registerForm" onsubmit="return validateForm()" action="?action=updateUserProfile"
+				method="POST" enctype="multipart/form-data" novalidate>
 				<div class=" row justify-content-center form-group">
-					<input class="form-control col-md-6 col-lg-5" id="firstName"
+					<input class="form-control" id="firstName"
 						type="text" placeholder="First Name " name="firstName"
 						required="required" value="<%=userBean.getUser().getFirstName()%>"/>
 				</div>
 				<div class="row justify-content-center form-group">
-					<input class="form-control col-md-6 col-lg-5" id="lastName"
+					<input class="form-control" id="lastName"
 						type="text" placeholder="Last Name " name="lastName"
 						required="required" value="<%=userBean.getUser().getLastName()%>"/>
 				</div>
 				<div class="form-group row justify-content-center">
-					<input class="form-control col-md-6 col-lg-5" id="username"
+					<input class="form-control" id="username"
 						type="text" placeholder="Username " name="username"
 						required="required" value="<%=userBean.getUser().getUsername()%>"/>
 				</div>
 				<div class="form-group row justify-content-center">
-					<input class="form-control col-md-6 col-lg-5" id="email"
+					<input class="form-control" id="email"
 						type="email" placeholder="Email " name="email" required="required"
 						value="<%=userBean.getUser().getEmail()%>"/>
 				</div>
 				<div class="row justify-content-center">
-					<div class="col-md-6 col-lg-5">
 						<a id="changePassword" href="#passwordOld">Change password</a>
-					</div>
+					
 				</div>
 				<div class="form-group row justify-content-center">
-					<input class="form-control col-md-6 col-lg-5" id="passwordOld"
+					<input class="form-control" id="passwordOld"
 						type="password" placeholder="Old password " name="oldPassword"
 						style="display: none" />
 				</div>
 				<div class="form-group row justify-content-center">
-					<input class="form-control col-md-6 col-lg-5" id="password1"
+					<input class="form-control" id="password1"
 						type="password" placeholder="Password " name="password1"
 						style="display: none" />
 				</div>
 				<div class="form-group row justify-content-center">
-					<input class="form-control col-md-6 col-lg-5" id="password2"
+					<input class="form-control" id="password2"
 						type="password" placeholder="Repeat Password " name="password2"
 						style="display: none" />
 				</div>
 				<div class="form-group row justify-content-center">
-					<select class="form-control col-md-6 col-lg-5" id="countries"
+					<select class="form-control" id="countries"
 						name="country" onchange="loadRegions()">
 						<option value="" disabled selected>Select country</option>
 					</select>
 					<p class="help-block text-danger"></p>
 				</div>
 				<div class="form-group row justify-content-center">
-					<select class="form-control col-md-6 col-lg-5" id="regions"
+					<select class="form-control" id="regions"
 						name="region" onchange="loadCities()">
 						<option value="" disabled selected>Select region</option>
 					</select>
 					<p class="help-block text-danger"></p>
 				</div>
 				<div class="form-group row justify-content-center">
-					<select class="form-control col-md-6 col-lg-5" id="cities"
+					<select class="form-control" id="cities"
 						name="city">
 						<option value="" disabled selected>Select city</option>
 					</select>
-					<p class="help-block text-danger"></p>
 				</div>
 				<div class="row justify-content-center">
-					<div class="col-md-6 col-lg-5">
 						<label for="img">Profile picture:</label>
-					</div>
+					
 				</div>
 				<div class="form-group  row justify-content-center">
-					<div class="form-control col-md-6 col-lg-5">
+					<div class="form-control">
 						<input type="file" id="img" name="img" accept="image/*" />
 					</div>
 				</div>
 				<div class="form-group row justify-content-center">
-					<div class="form-control col-md-6 col-lg-5 align-items-left">
+					<div class="form-control align-items-left">
 						<input type="checkbox" id="subscribeApp" name="notification"
 							value="notificationApp" /> <label for="subscribeApp">Send
 							me notifications in app.</label>
 					</div>
 				</div>
 				<div class="form-group row justify-content-center">
-					<div class="form-control col-md-6 col-lg-5">
+					<div class="form-control">
 						<input type="checkbox" id="subscribeEmail" name="notification"
 							value="notificationEmail" /> <label for="subscribeEmail">Send
 							me notifications on email.</label>
@@ -117,13 +117,15 @@ if(profileUpdateResult == null){
 				</div>
 				<input type="hidden" id="flag" name="flag" value="" /> 
 				<input type="hidden" id="a2c" name="a2c" value="" />
-				<p id="res" class="row help-block justify-content-center text-danger"><%= profileUpdateResult %></p>
+				<p id="validationResult" class="row help-block justify-content-center text-danger"><%= profileUpdateResult %></p>
 				<div class="text-center">
 					<div id="success"></div>
 					<button class="btn btn-primary btn-xl text-uppercase"
 						id="registerButton" type="submit">Save</button>
 				</div>
 			</form>
+				</div>
+			</div>
 		</div>
 	</section>
 	<!--Location info script-->
