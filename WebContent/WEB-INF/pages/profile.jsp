@@ -20,7 +20,7 @@ if(profileUpdateResult == null){
 <script src="./js/validateProfileForm.js"></script>
 </head>
 
-<body>
+<body class="bg-light">
 	<!--Register form-->
 	<section class="page-section" id="#register">
 		<div class="container justify-content-center align-items-center">

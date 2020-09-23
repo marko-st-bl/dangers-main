@@ -29,7 +29,7 @@ List<Category> categories = categoryBean.getAllCategories();
 <!-- Google Maps-->
 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 </head>
-<body>
+<body class="bg-light">
 <!--Navbar-->
     <nav class="navbar sticky-top navbar-expand-md navbar-dark bg-dark">
         <div class="container">
