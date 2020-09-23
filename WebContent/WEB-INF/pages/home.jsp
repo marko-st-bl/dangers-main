@@ -233,21 +233,13 @@
     	// ADD TOGGLES
     $(document).ready(function(){
     	addToggleListeners();
-    });
     	// ADD POST FORM SUBMIT LISTENER
-    $(document).ready(function(){
     	addPostFormSubmitListener();
-    });
     	// ADD PREVIEW LISTENER
-    $(document).ready(function(){
     	addPreviewListener();
-    });
 		// LOAD WARNINGS
-	$(document).ready(function(){
 		setInterval(loadWarnings, 5000);
-	});
 		// LOAD POSTS
-	$(document).ready(function() {
 		loadPosts();
 		setInterval(loadPosts, 30000);
 	});

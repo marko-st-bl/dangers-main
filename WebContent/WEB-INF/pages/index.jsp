@@ -23,8 +23,8 @@
 		<div class="row justify-content-center align-items-center"  style="height: 100vh">
 			<div class="col-md-6">
 				<div class="containter bg-light border rounded">
-					<div class="text-center">
-						<h2 class="section-heading text-uppercase">Login</h2>
+				<div class="text-center my-2">
+						<h2 class="text-uppercase text-primary">Login</h2>
 					</div>
 					<form id="loginForm" name="login" action="?action=login"
 						method="POST">
