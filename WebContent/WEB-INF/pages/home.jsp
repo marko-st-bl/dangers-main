@@ -595,12 +595,12 @@
 									$('#comments-' + posts[i].id).empty();
 									let output = '';
 									for ( let j in posts[i].comments) {
-										output += '<div class="row">'
+										output += '<div class="row my-2">'
 												+ '<div class="comment-avatar-container col-2 col-lg-1">'
 												+ '<img class="comment-avatar rounded-circle" src="'+posts[i].comments[j].author.avatar+'" alt="">'
 												+ '</div>'
 												+ '<div class="col-10 col-lg-11">'
-												+ '<div class="p-2 bg-light">'
+												+ '<div class="p-2 bg-light border rounded">'
 												+ '<h6 class="comment-author">'
 												+ posts[i].comments[j].author.firstName
 												+ ' '
