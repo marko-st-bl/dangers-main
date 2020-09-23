@@ -224,7 +224,7 @@
         //ADD EVENT LISTENERS
 
         //LOAD FORECAST
-    window.addEventListener('DOMContentLoaded', loadForecast('<%= userBean.getUser().getCountry() %>'));
+    window.addEventListener('DOMContentLoaded', showWeathetForecasts('<%= userBean.getUser().getCountry() %>'));
 
 
 	//SHOW-IMG-PREVIEW
