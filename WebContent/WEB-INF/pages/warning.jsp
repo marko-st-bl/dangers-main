@@ -107,19 +107,40 @@ List<Category> categories = categoryBean.getAllCategories();
     </div>
     <script>
         "use strict";
-
+        
         let map;
         let lastMarker;
 
         function initMap() {
-            var map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 4,
-                center: { lat: -25.363882, lng: 131.044922 }
-            });
+        	var myOptions = {
+        		      zoom: 4,
+        		      mapTypeControl: true,
+        		      mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU},
+        		      navigationControl: true,
+        		      navigationControlOptions: {style: google.maps.NavigationControlStyle.SMALL},
+        		      mapTypeId: google.maps.MapTypeId.ROADMAP      
+        		    }
+            map = new google.maps.Map(document.getElementById('map'), myOptions);
 
             map.addListener('click', function (e) {
                 placeMarkerAndPanTo(e.latLng, map);
             });
+        }
+        
+        if(!navigator.geolocation) {
+            alert('Geolocation is not supported by your browser');
+          } else {
+            navigator.geolocation.getCurrentPosition(success, error);
+          }
+        
+        function success(position){
+        	var pos=new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+        	map.setCenter(pos);
+        	map.setZoom(14);
+        }
+        
+        function error(){
+        	alert('error');
         }
 
         function placeMarkerAndPanTo(latLng, map) {
