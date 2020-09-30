@@ -221,37 +221,47 @@ public class Controller extends HttpServlet {
 			session.setAttribute("profileUpdateResult", profileUpdateResult);
 		}
 		/*
-		 * WARNING
+		 * PROTECTED PAGES
 		 */
-		else if(action.equals("warning")) {
-			address = "WEB-INF/pages/warning.jsp";
-		}
-		/*
-		 * ADD WARNING
-		 */
-		else if(action.equals("addWarning")) {
-			WarningBean warningBean = new WarningBean();
-			String description = request.getParameter("description");
-			String checked[] = request.getParameterValues("urgent");
-			boolean urgent = checked != null ? true : false;
-			String lat = request.getParameter("lat");
-			String lon = request.getParameter("lng");
-			if(lat != null && !(lat.equals("")) && lon != null && !(lon.equals(""))) {
-				double latitude = Double.parseDouble(lat);
-				double longitude = Double.parseDouble(lon);
-				warningBean.setWarning(new Warning(((UserBean)session.getAttribute("userBean")).getUser(), latitude, longitude, urgent, description));
-			} else {
-				warningBean.setWarning(new Warning(((UserBean)session.getAttribute("userBean")).getUser(), urgent, description));
-			}
-			String[] categories =request.getParameterValues("category");
-			for(String catId:categories) {
-				warningBean.getWarning().getCategories().add(new CategoryDAO().getCategoryById(Integer.parseInt(catId)));
-			}
-			warningBean.addWarning();
-			address = "WEB-INF/pages/warning.jsp";
-		}
 		else {
-			address = "/WEB-INF/pages/index.jsp";
+			UserBean userBean = (UserBean) session.getAttribute("userBean");
+			if(userBean == null || !userBean.isLoggedIn()) {
+				address = "/WEB-INF/pages/index.jsp";
+			} else {
+				/*
+				 * WARNING
+				 */
+				if(action.equals("warning")) {
+					address = "WEB-INF/pages/warning.jsp";
+				}
+				/*
+				 * ADD WARNING
+				 */
+				else if(action.equals("addWarning")) {
+					WarningBean warningBean = new WarningBean();
+					String description = request.getParameter("description");
+					String checked[] = request.getParameterValues("urgent");
+					boolean urgent = checked != null ? true : false;
+					String lat = request.getParameter("lat");
+					String lon = request.getParameter("lng");
+					if(lat != null && !(lat.equals("")) && lon != null && !(lon.equals(""))) {
+						double latitude = Double.parseDouble(lat);
+						double longitude = Double.parseDouble(lon);
+						warningBean.setWarning(new Warning(((UserBean)session.getAttribute("userBean")).getUser(), latitude, longitude, urgent, description));
+					} else {
+						warningBean.setWarning(new Warning(((UserBean)session.getAttribute("userBean")).getUser(), urgent, description));
+					}
+					String[] categories =request.getParameterValues("category");
+					for(String catId:categories) {
+						warningBean.getWarning().getCategories().add(new CategoryDAO().getCategoryById(Integer.parseInt(catId)));
+					}
+					warningBean.addWarning();
+					address = "WEB-INF/pages/warning.jsp";
+				}
+				else {
+					address = "/WEB-INF/pages/index.jsp";
+				}
+			}
 		}
 		RequestDispatcher dispatcher = request.getRequestDispatcher(address);
 		dispatcher.forward(request, response);

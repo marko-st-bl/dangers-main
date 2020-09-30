@@ -18,7 +18,7 @@ public class CategoryDAO {
 		ResultSet rs = null;
 		
 		String query = "select id, name "
-				+ "from danger_category";
+				+ "from category";
 		
 		try {
 			conn = ConnectionPool.getConnectionPool().checkOut();
@@ -45,7 +45,7 @@ public class CategoryDAO {
 		ResultSet rs = null;
 		
 		String query = "select id, name "
-				+ "from danger_category "
+				+ "from category "
 				+ "where id=?";
 		
 		try {
@@ -73,8 +73,8 @@ public class CategoryDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
-		String query = "select warningId, dangerCategoryId "
-				+ "from warning_has_danger_category "
+		String query = "select warningId, categoryId "
+				+ "from warning_category "
 				+ "where warningId=?";
 		
 		try {

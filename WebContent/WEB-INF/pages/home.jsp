@@ -74,9 +74,8 @@
 					<h5><%=userBean.getUser().getLastName()%></h5>
 				</div>
 				<div class="row justify-content-center text-muted" id="numOfLogin">
-					Number of logins
-					<%=userBean.getNumOfLogins()%></div>
-				<div class="row p-2 text-primary">
+					<%=userBean.getNumOfLogins()%> logins</div>
+				<div class="row justify-content-center my-2 text-primary">
 					<h5>Notifications</h5>
 				</div>
 				<div class="notifications-container">
@@ -104,7 +103,7 @@
 							+"<p class=\"mb-1\">");
 							out.print(warn.getDescription()
 							+"</p> <small>"
-							+ warn.getDate() 
+							+ warn.getCreatedAt() 
 							+ "</small>"
 							+ "</a>");
 						}
@@ -222,27 +221,33 @@
 		src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
 	<!-- JQuery-->
 	<script src="./js/jquery-3.5.1.js"></script>
+	<script
+      src="https://maps.googleapis.com/maps/api/js?libraries=&v=weekly"
+      defer
+    ></script>
 </body>
 <!--Script-->
 <script>
     //ADD EVENT LISTENERS
 
-        //LOAD FORECAST
-    window.addEventListener('DOMContentLoaded', showWeathetForecasts('<%= userBean.getUser().getCountry() %>'));
-
-    	// ADD TOGGLES
-    $(document).ready(function(){
+        
+    window.addEventListener('DOMContentLoaded', function(){
+    	//LOAD FORECAST
+    	showWeathetForecasts('<%= userBean.getUser().getCountry() %>');
     	addToggleListeners();
-    	// ADD POST FORM SUBMIT LISTENER
-    	addPostFormSubmitListener();
-    	// ADD PREVIEW LISTENER
-    	addPreviewListener();
+		// ADD POST FORM SUBMIT LISTENER
+		addPostFormSubmitListener();
+		// ADD PREVIEW LISTENER
+		addPreviewListener();
 		// LOAD WARNINGS
 		setInterval(loadWarnings, 5000);
 		// LOAD POSTS
-		loadPosts();
-		setInterval(loadPosts, 30000);
-	});
+		getPosts();
+		setInterval(getPosts, 30000);
+		//loadPosts();
+		//setInterval(loadPosts, 30000);
+    });
+
 
 </script>
 </body>

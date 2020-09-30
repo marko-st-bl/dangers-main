@@ -2,11 +2,6 @@ package marko.ip.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,13 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
-import marko.ip.beans.CommentBean;
 import marko.ip.beans.PostBean;
-import marko.ip.dto.Comment;
-import marko.ip.dto.News;
+import marko.ip.beans.WarningBean;
 import marko.ip.dto.Post;
+import marko.ip.dto.Warning;
 import marko.ip.rss.RSSFeed;
-import marko.ip.rss.RSSFeedMessage;
 import marko.ip.rss.RSSFeedParser;
 
 /**
@@ -33,6 +26,8 @@ import marko.ip.rss.RSSFeedParser;
 @WebServlet("/Posts")
 public class Posts extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	private static final String RSS_FEED_URL = "https://europa.eu/newsroom/calendar.xml_en?field_nr_events_by_topic_tid=151";
 	
 	private Gson gson = new Gson();
        
@@ -47,25 +42,15 @@ public class Posts extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		List<News> news = new ArrayList<>();
+		//List<News> news = new ArrayList<>();
 		List<Post> posts = new PostBean().getAllPosts();
-		for(Post post : posts) {
-			List<Comment> comments = new CommentBean().getCommentsByPostId(post.getId());
-			news.add(new News(post.getId(), post.getOwner(), post.getText(), post.getType(), post.getUrl(), post.getCreatedAt(), comments));
-		}
-		RSSFeedParser rssParser = new RSSFeedParser("https://europa.eu/newsroom/calendar.xml_en?field_nr_events_by_topic_tid=151");
+		List<Warning> warnings = new WarningBean().getAllWarnings();
+		posts.addAll(warnings);
+		RSSFeedParser rssParser = new RSSFeedParser(RSS_FEED_URL);
 		RSSFeed rssFeed = rssParser.readFeed();
-		DateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z");
-		for(RSSFeedMessage message: rssFeed.getEntries()) {
-			try {
-				news.add(new News(message.getGuid().replaceAll("[^a-zA-Z]", ""), message.getTitle(), message.getDescription(),
-						message.getLink(), new Timestamp(sdf.parse(message.getPubDate()).getTime())));
-			} catch (ParseException e1) {
-				e1.printStackTrace();
-			}
-		}
-		Collections.sort(news);
-		String newsJSONString = this.gson.toJson(news);
+		posts.addAll(rssFeed.getEntries());
+		Collections.sort(posts);
+		String newsJSONString = this.gson.toJson(posts);
 		PrintWriter out = response.getWriter();
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");

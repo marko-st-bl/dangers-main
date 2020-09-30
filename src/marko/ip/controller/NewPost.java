@@ -59,10 +59,10 @@ public class NewPost extends HttpServlet {
 		String url = "";
 		
 		PostBean postBean = new PostBean();
-		postBean.getPost().setText(text);
+		postBean.getPost().setDescription(text);
 		postBean.getPost().setType(type);
 		System.out.println();
-		postBean.getPost().setOwner(((UserBean)session.getAttribute("userBean")).getUser());
+		postBean.getPost().setAuthor(((UserBean)session.getAttribute("userBean")).getUser());
 		if(type.equals("text")) {
 			
 		} else if(type.equals("image")) {

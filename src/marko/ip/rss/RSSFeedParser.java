@@ -80,12 +80,8 @@ public class RSSFeedParser {
                     }
                 } else if (event.isEndElement()) {
                     if (event.asEndElement().getName().getLocalPart() == (ITEM)) {
-                        RSSFeedMessage message = new RSSFeedMessage();
-                        message.setDescription(description);
-                        message.setGuid(guid);
-                        message.setLink(link);
-                        message.setTitle(title);
-                        message.setPubDate(pubdate);
+                        RSSFeedMessage message = new RSSFeedMessage(guid, title, description, 
+                        		link, pubdate);
                         feed.getEntries().add(message);
                         event = eventReader.nextEvent();
                         continue;
