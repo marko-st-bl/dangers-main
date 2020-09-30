@@ -5,15 +5,18 @@ import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 
 import marko.ip.beans.PostBean;
+import marko.ip.beans.UserBean;
 import marko.ip.beans.WarningBean;
 import marko.ip.dto.Post;
 import marko.ip.dto.Warning;
@@ -42,24 +45,31 @@ public class Posts extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//List<News> news = new ArrayList<>();
-		List<Post> posts = new PostBean().getAllPosts();
-		List<Warning> warnings = new WarningBean().getAllWarnings();
-		posts.addAll(warnings);
-		RSSFeedParser rssParser = new RSSFeedParser(RSS_FEED_URL);
-		RSSFeed rssFeed = rssParser.readFeed();
-		posts.addAll(rssFeed.getEntries());
-		Collections.sort(posts);
-		String newsJSONString = this.gson.toJson(posts);
-		PrintWriter out = response.getWriter();
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-		response.addHeader("Access-Control-Allow-Origin", "*");
-        response.addHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, HEAD");
-        response.addHeader("Access-Control-Allow-Headers", "X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept");
-        response.addHeader("Access-Control-Max-Age", "1728000");
-		out.print(newsJSONString);
-		out.flush();
+		HttpSession session = request.getSession();
+		UserBean userBean = ((UserBean)session.getAttribute("userBean"));
+		
+		if(userBean != null && userBean.isLoggedIn()) {			
+			List<Post> posts = new PostBean().getAllPosts();
+			List<Warning> warnings = new WarningBean().getAllWarnings();
+			posts.addAll(warnings);
+			RSSFeedParser rssParser = new RSSFeedParser(RSS_FEED_URL);
+			RSSFeed rssFeed = rssParser.readFeed();
+			posts.addAll(rssFeed.getEntries());
+			Collections.sort(posts);
+			String newsJSONString = this.gson.toJson(posts);
+			PrintWriter out = response.getWriter();
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			response.addHeader("Access-Control-Allow-Origin", "*");
+			response.addHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, HEAD");
+			response.addHeader("Access-Control-Allow-Headers", "X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept");
+			response.addHeader("Access-Control-Max-Age", "1728000");
+			out.print(newsJSONString);
+			out.flush();
+		} else {
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/login.jsp");
+			dispatcher.forward(request, response);
+		}
 	}
 
 	/**

@@ -45,6 +45,8 @@ function addForecasts(forecasts){
 		document.getElementById('temp' + i).innerHTML = Math
 				.round(forecasts.list[forecast].main.temp)
 				+ '&#8451;';
+		document.getElementById('maxtemp' + i).innerHTML += Math.round(forecasts.list[forecast].main.temp_max) + '&#8451;';
+		document.getElementById('mintemp' + i).innerHTML += Math.round(forecasts.list[forecast].main.temp_min) + '&#8451;';
 	}
 	
 }

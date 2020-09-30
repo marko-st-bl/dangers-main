@@ -7,9 +7,6 @@
 	scope="session" />
 <jsp:useBean id="warningBean" class="marko.ip.beans.WarningBean"
 	scope="session" />
-<%
-	List<Warning> warnings = warningBean.getAllWarnings();
-%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -34,9 +31,9 @@
 <script src="./js/postForm.js"></script>
 </head>
 
-<body>
+<body class="bg-light">
 	<!--Navbar-->
-	<nav class="navbar sticky-top navbar-expand-md navbar-dark bg-dark">
+	<nav class="navbar sticky-top navbar-expand-md navbar-dark bg-dark shadow-sm">
 		<div class="container">
 			<a class="navbar-brand" href="#">Dangers Info</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -62,7 +59,8 @@
 	<div id="main-page" class="container">
 		<div class="row">
 			<!--SIDEBAR-->
-			<div class="profile-sidebar col-md-4 col-lg-3">
+			<div class="profile-sidebar align-self-start col-md-4 col-lg-3">
+			<div class="bg-white border rounded shadow-sm py-2">			
 				<div class="avatar row justify-content-center">
 					<img class="rounded-circle"
 						src="<%=userBean.getUser().getAvatar()%>" />
@@ -74,14 +72,24 @@
 					<h5><%=userBean.getUser().getLastName()%></h5>
 				</div>
 				<div class="row justify-content-center text-muted" id="numOfLogin">
-					<%=userBean.getNumOfLogins()%> logins</div>
-				<div class="row justify-content-center my-2 text-primary">
-					<h5>Notifications</h5>
+					<%=userBean.getNumOfLogins()%> logins
 				</div>
-				<div class="notifications-container">
-					<div id="warn-list" class="list-group">
-					<%
-						for(Warning warn:warningBean.getAllWarnings()){
+			</div>
+			<%
+			List<Warning> warnings = warningBean.getAllWarnings();
+			
+			if(userBean.getUser().isNotificationApp()){	
+				out.print("<div class=\"row justify-content-center my-2 mx-0 bg-white text-primary\">"
+				+			"<button type=\"button\" class=\"btn btn-outline-danger btn-block\">"
+				+				"Notifications <span class=\"badge badge-danger\">"
+				+				warnings.size()
+				+				"</span></button>"
+				+		"</div>"
+				+		"<div class=\"notifications-container mb-3\">"
+				+			"<div id=\"warn-list\" class=\"list-group\">");
+					
+						for(Warning warn:warnings){
+							if(warn.isUrgent()){
 							out.print("<a id=\"warn-"+warn.getId()+"\"");
 							if(warn.isLocationSet()){
 								out.print("target=\"_blank\" href=\"https://www.google.com/maps/@" +warn.getLat() +","+ warn.getLng()+",15z\"");
@@ -106,15 +114,18 @@
 							+ warn.getCreatedAt() 
 							+ "</small>"
 							+ "</a>");
+							}
 						}
+						out.print("</div></div>");
+			}
 						%>
-					</div>
-				</div>
+					
+				
 			</div>
 			<!--MAIN-->
 			<div class="posts-container col-md-8 col-lg-7">
 				<!--POST-FORM-->
-				<div class="post-form-container border rounded">
+				<div class="post-form-container bg-white shadow-sm border rounded">
 					<div class="post-form-header">
 						<h3 class="text-primary">Add new post...</h3>
 					</div>
@@ -177,38 +188,50 @@
 				<div class="posts"></div>
 			</div>
 			<!--WEATHER-->
-			<div class="col-lg-2">
-				<div class="forecast">
-					<div class="row justify-content-center">
-						<div class="cityName" id="cityName1"></div>
+			<div class="forecasts align-self-start col-lg-2">
+				<div class="forecast bg-white border rounded shadow-sm mb-2">
+					<div class="row justify-content-center p-2">
+						<h6 class="cityName text-center" id="cityName1"></h6>
 					</div>
-					<div class="row justify-content-center">
+					<div class="row justify-content-around align-items-center mx-0">
+						<div>
+							<p class="m-0"><small id="maxtemp1" class="text-muted"><i class="fas fa-angle-up"></i></small></p>
+							<p class="m-0"><small id="mintemp1" class="text-muted"><i class="fas fa-angle-down"></i></small></p>
+						</div>
 						<img id="icon1" src="" alt="">
 					</div>
 					<div class="row justify-content-center">
-						<div id="temp1"></div>
+						<div id="temp1" class="temperature"></div>
 					</div>
 				</div>
-				<div class="forecast">
-					<div class="row justify-content-center">
-						<div class="cityName" id="cityName2"></div>
+				<div class="forecast bg-white border rounded shadow-sm mb-2">
+					<div class="row justify-content-center p-2">
+						<h6 class="cityName text-center" id="cityName2"></h6>
 					</div>
-					<div class="row justify-content-center">
+					<div class="row justify-content-around align-items-center mx-0">
+						<div>
+							<p class="m-0"><small id="maxtemp2" class="text-muted"><i class="fas fa-angle-up"></i></small></p>
+							<p class="m-0"><small id="mintemp2" class="text-muted"><i class="fas fa-angle-down"></i></small></p>
+						</div>
 						<img id="icon2" src="" alt="">
 					</div>
 					<div class="row justify-content-center">
-						<div id="temp2"></div>
+						<div id="temp2" class="temperature"></div>
 					</div>
 				</div>
-				<div class="forecast">
-					<div class="row justify-content-center">
-						<div class="cityName" id="cityName3"></div>
+				<div class="forecast bg-white border rounded shadow-sm mb-2">
+					<div class="row justify-content-center p-2">
+						<h6 class="cityName text-center" id="cityName3"></h6>
 					</div>
-					<div class="row justify-content-center">
+					<div class="row justify-content-around align-items-center mx-0">
+						<div>
+							<p class="m-0"><small id="maxtemp3" class="text-muted"><i class="fas fa-angle-up"></i></small></p>
+							<p class="m-0"><small id="mintemp3" class="text-muted"><i class="fas fa-angle-down"></i></small></p>
+						</div>
 						<img id="icon3" src="" alt="">
 					</div>
 					<div class="row justify-content-center">
-						<div id="temp3"></div>
+						<div id="temp3" class="temperature"></div>
 					</div>
 				</div>
 			</div>

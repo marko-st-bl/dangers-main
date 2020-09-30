@@ -9830,10 +9830,6 @@ img::-moz-selection {
   padding-top: 1rem;
 }
 
-.forecast {
-  margin-bottom: 4rem;
-}
-
 .cityName {
   word-wrap: normal;
 }
@@ -9975,8 +9971,11 @@ header.hero .hero-subheading {
   }
 }
 
+@media (min-width: 768px){	
 .profile-sidebar {
-  justify-content: center;
+  position: sticky;
+  top: 100px;
+}
 }
 
 .avatar img {
@@ -10008,4 +10007,13 @@ header.hero .hero-subheading {
 .map{
 	width: 100%;
 	height: 400px;
+}
+
+.forecasts{
+	position: sticky;
+	top: 100px;
+}
+
+.temperature{
+	font-size: 2rem;
 }

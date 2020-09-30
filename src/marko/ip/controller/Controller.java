@@ -45,13 +45,12 @@ public class Controller extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		String address = "/WEB-INF/pages/index.jsp";
+		String address = "/WEB-INF/pages/login.jsp";
 		String action = request.getParameter("action");
 		HttpSession session = request.getSession();
 		session.setMaxInactiveInterval(60 * 30);
-
 		if (action == null || action.equals("")) {
-			address = "/WEB-INF/pages/index.jsp";
+			address = "/WEB-INF/pages/login.jsp";
 		}
 		/*
 		 * LOGIN
@@ -70,7 +69,7 @@ public class Controller extends HttpServlet {
 		 */
 		else if (action.equals("logout")) {
 			session.invalidate();
-			address = "/WEB-INF/pages/index.jsp";
+			address = "/WEB-INF/pages/login.jsp";
 		}
 		/*
 		 * REGISTER
@@ -226,7 +225,7 @@ public class Controller extends HttpServlet {
 		else {
 			UserBean userBean = (UserBean) session.getAttribute("userBean");
 			if(userBean == null || !userBean.isLoggedIn()) {
-				address = "/WEB-INF/pages/index.jsp";
+				address = "/WEB-INF/pages/login.jsp";
 			} else {
 				/*
 				 * WARNING
@@ -258,8 +257,14 @@ public class Controller extends HttpServlet {
 					warningBean.addWarning();
 					address = "WEB-INF/pages/warning.jsp";
 				}
+				/*
+				 * HOME
+				 */
+				else if(action.equals("home")) {
+					address = "WEB-INF/pages/home.jsp";
+				}
 				else {
-					address = "/WEB-INF/pages/index.jsp";
+					address = "/WEB-INF/pages/login.jsp";
 				}
 			}
 		}
