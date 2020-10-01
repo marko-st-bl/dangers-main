@@ -59,7 +59,7 @@
 	<div id="main-page" class="container">
 		<div class="row">
 			<!--SIDEBAR-->
-			<div class="profile-sidebar align-self-start col-md-4 col-lg-3">
+			<div class="profile-sidebar align-self-start col-md-4 col-lg-3 overflow-auto">
 			<div class="bg-white border rounded shadow-sm py-2">			
 				<div class="avatar row justify-content-center">
 					<img class="rounded-circle"
@@ -76,17 +76,18 @@
 				</div>
 			</div>
 			<%
-			List<Warning> warnings = warningBean.getAllWarnings();
+			List<Warning> warnings = warningBean.getUrgentWarnings();
 			
 			if(userBean.getUser().isNotificationApp()){	
 				out.print("<div class=\"row justify-content-center my-2 mx-0 bg-white text-primary\">"
-				+			"<button type=\"button\" class=\"btn btn-outline-danger btn-block\">"
+				+			"<button type=\"button\" class=\"btn btn-outline-danger btn-block\""
+				+				"data-toggle=\"collapse\" data-target=\"#warn-list\" aria-expanded=\"false\" aria-controls=\"warn-list\">"
 				+				"Notifications <span class=\"badge badge-danger\">"
 				+				warnings.size()
 				+				"</span></button>"
 				+		"</div>"
 				+		"<div class=\"notifications-container mb-3\">"
-				+			"<div id=\"warn-list\" class=\"list-group\">");
+				+			"<div id=\"warn-list\" class=\"list-group collapse show\">");
 					
 						for(Warning warn:warnings){
 							if(warn.isUrgent()){

@@ -9975,6 +9975,7 @@ header.hero .hero-subheading {
 .profile-sidebar {
   position: sticky;
   top: 100px;
+  height: 80vh;
 }
 }
 
@@ -10012,6 +10013,8 @@ header.hero .hero-subheading {
 .forecasts{
 	position: sticky;
 	top: 100px;
+	height: 85vh;
+	overflow: auto;
 }
 
 .temperature{
