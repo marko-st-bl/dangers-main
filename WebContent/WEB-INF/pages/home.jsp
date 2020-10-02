@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
+<%@page import="java.util.Collections"%>
 <%@page import="marko.ip.dto.Warning"%>
 <%@page import="marko.ip.dto.Category"%>
 <jsp:useBean id="userBean" class="marko.ip.beans.UserBean"
@@ -77,12 +78,13 @@
 			</div>
 			<%
 			List<Warning> warnings = warningBean.getUrgentWarnings();
+			Collections.sort(warnings);
 			
 			if(userBean.getUser().isNotificationApp()){	
 				out.print("<div class=\"row justify-content-center my-2 mx-0 bg-white text-primary\">"
 				+			"<button type=\"button\" class=\"btn btn-outline-danger btn-block\""
 				+				"data-toggle=\"collapse\" data-target=\"#warn-list\" aria-expanded=\"false\" aria-controls=\"warn-list\">"
-				+				"Notifications <span class=\"badge badge-danger\">"
+				+				"Notifications <span id=\"countNotifications\" class=\"badge badge-danger\">"
 				+				warnings.size()
 				+				"</span></button>"
 				+		"</div>"
@@ -112,7 +114,7 @@
 							+"<p class=\"mb-1\">");
 							out.print(warn.getDescription()
 							+"</p> <small>"
-							+ warn.getCreatedAt() 
+							+ warn.getFormattedDate() 
 							+ "</small>"
 							+ "</a>");
 							}
@@ -147,10 +149,12 @@
 									<button id="video-btn" class="btn" type="button">
 										<i class="fas fa-video"></i>
 									</button>
-									<button id="yt-btn" class="btn" type="button">
+									<button id="yt-btn" class="btn" type="button" data-toggle="collapse" 
+										data-target="#youtube-input-div" aria-expanded="false" aria-controls="youtube-input-div">
 										<i class="fab fa-youtube"></i>
 									</button>
-									<button id="link-btn" class="btn" type="button">
+									<button id="link-btn" class="btn" type="button" data-toggle="collapse" 
+										data-target="#link-input-div" aria-expanded="false" aria-controls="link-input-div">
 										<i class="fas fa-link"></i>
 									</button>
 								</div>
@@ -160,15 +164,13 @@
 								name="video" accept="video/*" style="display: none" /> <input
 								type="text" id="post-type" name="type" value="text"
 								style="display: none" />
-							<div class="row justify-content-center">
+							<div id="link-input-div" class="row justify-content-center collapse">
 								<input id="link-input" class="form-control p-2 col-11"
-									type="url" id="link-input" name="link" placeholder="Paste url"
-									style="display: none" />
+									type="url" id="link-input" name="link" placeholder="Paste url" />
 							</div>
-							<div class="row justify-content-center">
+							<div id="youtube-input-div" class="row justify-content-center collapse">
 								<input id="youtube-input" class="p-2 col-11 form-control"
-									type="url" name="youtube" placeholder="Paste youtube link"
-									style="display: none" />
+									type="url" name="youtube" placeholder="Paste youtube link"/>
 							</div>
 							<div class="row justify-content-center">
 								<img id="img-preview" class="p-1 col-11" src="">
@@ -184,6 +186,7 @@
 							</div>
 						</form>
 					</div>
+					<div id="validation-result" class="text-danger text-center"></div>
 				</div>
 				<!--POSTS-->
 				<div class="posts"></div>
@@ -264,12 +267,13 @@
 		// ADD PREVIEW LISTENER
 		addPreviewListener();
 		// LOAD WARNINGS
+		<% if(userBean.getUser().isNotificationApp()){ %>
+		loadWarnings();
 		setInterval(loadWarnings, 5000);
+		<% } %>
 		// LOAD POSTS
 		getPosts();
 		setInterval(getPosts, 30000);
-		//loadPosts();
-		//setInterval(loadPosts, 30000);
     });
 
 

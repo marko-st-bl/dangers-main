@@ -48,6 +48,7 @@ public class Controller extends HttpServlet {
 		String address = "/WEB-INF/pages/login.jsp";
 		String action = request.getParameter("action");
 		HttpSession session = request.getSession();
+		session.setAttribute("notification", "");
 		session.setMaxInactiveInterval(60 * 30);
 		if (action == null || action.equals("")) {
 			address = "/WEB-INF/pages/login.jsp";
@@ -60,8 +61,17 @@ public class Controller extends HttpServlet {
 			String password = request.getParameter("password");
 			UserBean userBean = new UserBean();
 			if (userBean.login(username, password)) {
-				session.setAttribute("userBean", userBean);
-				address = "/WEB-INF/pages/home.jsp";
+				String status = userBean.getUser().getStatus();
+				if (status.equals("active")) {
+					userBean.addLogin();
+					userBean.setLoggedIn(true);
+					session.setAttribute("userBean", userBean);
+					address = "/WEB-INF/pages/home.jsp";
+				} else {
+					session.setAttribute("notification", "Invalid login: Your account is " + status + ".");
+				}
+			} else {
+				session.setAttribute("notification", "Invalid username/password!");
 			}
 		}
 		/*
@@ -88,38 +98,28 @@ public class Controller extends HttpServlet {
 			String password2 = request.getParameter("password2");
 			String email = request.getParameter("email");
 
-			String registerResultMessage = FormValidator.validateRegisterForm(firstName, lastName, username, password1,
+			String validationResult = FormValidator.validateRegisterForm(firstName, lastName, username, password1,
 					password2, email);
 			UserBean userBean = new UserBean();
 			User newUser = new User(firstName, lastName, username, password1, email);
 			userBean.setUser(newUser);
 			session.setAttribute("userBean", userBean);
-			if (registerResultMessage.equals("OK")) {
-				if (!(userBean.isUsernameUsed(username))) {
-					if (!(userBean.isEmailUsed(email))) {
-						if (userBean.addUser()) {
-							System.out.println(newUser.getUsername() + " succesfully registered.");
-							userBean.readUser();
-							session.setAttribute("userBean", userBean);
-							address = "WEB-INF/pages/profile.jsp";
-						}
-					} else {
-						registerResultMessage = "Email is already used.";
-						address = "WEB-INF/pages/register.jsp";
-					}
-				} else {
-					registerResultMessage = "Username is already used.";
-					address = "WEB-INF/pages/register.jsp";
+			if (validationResult.equals("OK")) {
+				if (userBean.addUser()) {
+					System.out.println(newUser.getUsername() + " succesfully registered.");
+					userBean.readUser();
+					session.setAttribute("userBean", userBean);
+					address = "WEB-INF/pages/profile.jsp";
 				}
 			} else {
 				address = "WEB-INF/pages/register.jsp";
+				session.setAttribute("notification", validationResult);
 			}
-			session.setAttribute("registerResultMessage", registerResultMessage);
 		}
 		/*
 		 * PROFILE PAGE
 		 */
-		else if(action.equals("profile")) {
+		else if (action.equals("profile")) {
 			address = "WEB-INF/pages/profile.jsp";
 		}
 		/*
@@ -151,8 +151,12 @@ public class Controller extends HttpServlet {
 					}
 				}
 			}
-			String profileUpdateResult = FormValidator.validateProfileForm(firstName, lastName, username, email);
-			if (profileUpdateResult.equals("OK")) {
+
+			UserBean userBean = (UserBean) session.getAttribute("userBean");
+			String validationResult = FormValidator.validateProfileForm(firstName, lastName, username, oldPassword,
+					password1, password2, email, userBean);
+
+			if (validationResult.equals("OK")) {
 				Part imgPart = request.getPart("img");
 				InputStream input = imgPart.getInputStream();
 				if (imgPart.getSubmittedFileName().equals("")) {
@@ -172,98 +176,94 @@ public class Controller extends HttpServlet {
 					}
 					input.close();
 				}
-				UserBean userBean = (UserBean) session.getAttribute("userBean");
+
 				if (!oldPassword.equals("")) {
-					userBean.getUser().setPassword(oldPassword);
-					userBean.readUser();
-					if (userBean.getUser() == null) {
-						profileUpdateResult = "Wrong password.";
-					} else {
-						if (!(password1.equals(password2))) {
-							profileUpdateResult = "Passwords dont match.";
-						}
-					}
+					userBean.getUser().setPassword(password1);
 				}
-				if (!(username.equals(userBean.getUser().getUsername()))) {
-					if (!(new UserBean().isUsernameUsed(username))) {
-						userBean.getUser().setUsername(username);
-					} else {
-						profileUpdateResult = "Username is already used.";
-					}
-				}
-				if (!(email.equals(userBean.getUser().getEmail()))) {
-					if (!(new UserBean().isEmailUsed(email))) {
-						userBean.getUser().setEmail(email);
-						;
-					} else {
-						profileUpdateResult = "Username is already used.";
-					}
-				}
-				if (profileUpdateResult.equals("OK")) {
+
+				if (!username.equals(userBean.getUser().getUsername())) {
 					userBean.getUser().setUsername(username);
-					userBean.getUser().setFirstName(firstName);
-					userBean.getUser().setLastName(lastName);
-					userBean.getUser().setEmail(email);
-					userBean.getUser().setCountry(country);
-					userBean.getUser().setRegion(region);
-					userBean.getUser().setCity(city);
-					userBean.getUser().setAvatar(avatar);
-					userBean.getUser().setNotificationApp(notificationApp);
-					userBean.getUser().setNotificationEmail(notificationEmail);
-					userBean.updateUser();
-				} else {
-					address = "WEB-INF/pages/profile.jsp";
 				}
+
+				if (!(email.equals(userBean.getUser().getEmail()))) {
+					userBean.getUser().setEmail(email);
+				}
+
+				userBean.getUser().setFirstName(firstName);
+				userBean.getUser().setLastName(lastName);
+				userBean.getUser().setCountry(country);
+				userBean.getUser().setRegion(region);
+				userBean.getUser().setCity(city);
+				userBean.getUser().setAvatar(avatar);
+				userBean.getUser().setNotificationApp(notificationApp);
+				userBean.getUser().setNotificationEmail(notificationEmail);
+				userBean.updateUser();
+
 			} else {
 				address = "WEB-INF/pages/profile.jsp";
+				session.setAttribute("notification", validationResult);
 			}
-			session.setAttribute("profileUpdateResult", profileUpdateResult);
 		}
 		/*
 		 * PROTECTED PAGES
 		 */
 		else {
 			UserBean userBean = (UserBean) session.getAttribute("userBean");
-			if(userBean == null || !userBean.isLoggedIn()) {
+			if (userBean == null || !userBean.isLoggedIn()) {
 				address = "/WEB-INF/pages/login.jsp";
 			} else {
 				/*
 				 * WARNING
 				 */
-				if(action.equals("warning")) {
+				if (action.equals("warning")) {
 					address = "WEB-INF/pages/warning.jsp";
 				}
 				/*
 				 * ADD WARNING
 				 */
-				else if(action.equals("addWarning")) {
+				else if (action.equals("addWarning")) {
 					WarningBean warningBean = new WarningBean();
 					String description = request.getParameter("description");
 					String checked[] = request.getParameterValues("urgent");
 					boolean urgent = checked != null ? true : false;
 					String lat = request.getParameter("lat");
 					String lon = request.getParameter("lng");
-					if(lat != null && !(lat.equals("")) && lon != null && !(lon.equals(""))) {
-						double latitude = Double.parseDouble(lat);
-						double longitude = Double.parseDouble(lon);
-						warningBean.setWarning(new Warning(((UserBean)session.getAttribute("userBean")).getUser(), latitude, longitude, urgent, description));
+					String[] categories = request.getParameterValues("category");
+					
+					String validationResult = FormValidator.validateWarningForm(description, lat, lon, categories);
+					
+					if(validationResult.equals("OK")) {
+						
+						if (lat != null && !(lat.equals("")) && lon != null && !(lon.equals(""))) {								
+								double latitude = Double.parseDouble(lat);
+								double longitude = Double.parseDouble(lon);
+								warningBean.setWarning(new Warning(((UserBean) session.getAttribute("userBean")).getUser(),
+										latitude, longitude, urgent, description));
+						} else {
+							warningBean.setWarning(new Warning(((UserBean) session.getAttribute("userBean")).getUser(),
+									urgent, description));
+						}
+						
+						for (String catId : categories) {
+							warningBean.getWarning().getCategories()
+							.add(new CategoryDAO().getCategoryById(Integer.parseInt(catId)));
+						}
+						
+						warningBean.addWarning();
+						address = "WEB-INF/pages/warning.jsp";
+						
 					} else {
-						warningBean.setWarning(new Warning(((UserBean)session.getAttribute("userBean")).getUser(), urgent, description));
+						session.setAttribute("notification", validationResult);
+						address = "WEB-INF/pages/warning.jsp";
 					}
-					String[] categories =request.getParameterValues("category");
-					for(String catId:categories) {
-						warningBean.getWarning().getCategories().add(new CategoryDAO().getCategoryById(Integer.parseInt(catId)));
-					}
-					warningBean.addWarning();
-					address = "WEB-INF/pages/warning.jsp";
+					
 				}
 				/*
 				 * HOME
 				 */
-				else if(action.equals("home")) {
+				else if (action.equals("home")) {
 					address = "WEB-INF/pages/home.jsp";
-				}
-				else {
+				} else {
 					address = "/WEB-INF/pages/login.jsp";
 				}
 			}

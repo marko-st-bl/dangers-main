@@ -110,6 +110,12 @@ public class Post implements Serializable, Comparable<Post>{
 		this.createdAt = createdAt;
 	}
 	
+	public String getFormattedDate() {
+		SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy hh:mm:ss aaa");
+		return sdf.format(createdAt.getTime());
+		
+	}
+	
 
 
 	@Override

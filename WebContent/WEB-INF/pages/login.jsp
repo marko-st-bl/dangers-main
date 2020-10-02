@@ -32,9 +32,7 @@
 							<div class="col-10">
 								<div class="form-group">
 									<input class="form-control" id="username" type="text"
-										placeholder="Username" required="required" name="username"
-										data-validation-required-message="Please enter username." />
-									<p class="help-block text-danger"></p>
+										placeholder="Username" required="required" name="username"/>
 								</div>
 							</div>
 						</div>
@@ -42,14 +40,12 @@
 							<div class="col-10">
 								<div class="form-group">
 									<input class="form-control" id="password" type="password"
-										placeholder="Password" required="required" name="password"
-										data-validation-required-message="Please enter your password." />
-									<p class="help-block text-danger"></p>
+										placeholder="Password" required="required" name="password"/>
 								</div>
 							</div>
 						</div>
 						<div class="text-center">
-							<div id="success"></div>
+							<div id="response" class="text-danger text-center my-2" role="alert"><%=session.getAttribute("notification")!=null?session.getAttribute("notification").toString():""%></div>
 							<button class="btn btn-primary btn-xl text-uppercase"
 								id="loginButton" type="submit">Login</button>
 						</div>

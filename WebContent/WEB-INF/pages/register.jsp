@@ -3,12 +3,6 @@
 <jsp:useBean id="userBean" class="marko.ip.beans.UserBean"
 	scope="session" />
 
-<%
-	Object registerResponseMessage = session.getAttribute("registerResultMessage");
-	if (registerResponseMessage == null) {
-		registerResponseMessage = "";
-	}
-%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -58,7 +52,7 @@
 								placeholder="Repeat Password " required name="password2" />
 						</div>
 						<p id="validationResult"
-							class="row help-block justify-content-center text-center text-danger"><%=registerResponseMessage%></p>
+							class="row help-block justify-content-center text-center text-danger"><%=session.getAttribute("notification")%></p>
 						<div class="text-center">
 							<div id="success"></div>
 							<button class="btn btn-primary btn-xl text-uppercase"

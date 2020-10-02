@@ -2,12 +2,6 @@
 	pageEncoding="UTF-8"%>
 <jsp:useBean id="userBean" class="marko.ip.beans.UserBean"
 	scope="session" />
-<%
-Object profileUpdateResult = session.getAttribute("profileUpdateResult");
-if(profileUpdateResult == null){
-	profileUpdateResult="";
-}
-%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -117,7 +111,7 @@ if(profileUpdateResult == null){
 				</div>
 				<input type="hidden" id="flag" name="flag" value="" /> 
 				<input type="hidden" id="a2c" name="a2c" value="" />
-				<p id="validationResult" class="row help-block justify-content-center text-danger"><%= profileUpdateResult %></p>
+				<p id="validationResult" class="row help-block justify-content-center text-danger"><%= session.getAttribute("notification") %></p>
 				<div class="text-center">
 					<div id="success"></div>
 					<button class="btn btn-primary btn-xl text-uppercase"

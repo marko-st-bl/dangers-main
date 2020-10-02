@@ -12,6 +12,7 @@ function loadWarnings(){
 				for(let i in warnings){
 					let output='';
 					if($('#warn-' + warnings[i].id).length == 0){
+						document.getElementById('countNotifications').innerHTML = warnings.length;
 						output+= '<a id="warn-'+warnings[i].id+'"';
 						if(warnings[i].lat && warnings[i].lng){
 							output+= 'target="_blank" href="https://www.google.com/maps/@'+warnings[i].lat+','+warnings[i].lng+',15z"';

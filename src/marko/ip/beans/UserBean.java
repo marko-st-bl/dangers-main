@@ -20,9 +20,7 @@ public class UserBean implements Serializable, HttpSessionBindingListener {
 
 	public boolean login(String username, String password) {
 		user = new UserDAO().getUserByUsernamePassword(username, password);
-		if (user != null && user.getStatus().equals("active")) {
-			isLoggedIn = true;
-			addLogin();
+		if (user != null) {
 			return true;
 		}
 		return false;

@@ -100,7 +100,7 @@ function showUserPost(post){
 			let imageDiv = document.createElement("div");
 			imageDiv.classList.add("row", "mx-0");
 			let image = document.createElement("img");
-			image.classList.add("post-image py-2");
+			image.classList.add("post-image", "py-2");
 			image.src = post.url;
 			
 			imageDiv.append(image);
@@ -124,10 +124,10 @@ function showUserPost(post){
 			
 		case "warning":
 			let warningDiv = document.createElement("div");
-			warningDiv.classList.add("row" ,"mx-0");
+			warningDiv.classList.add("row" ,"m-2");
 			for(category of post.categories){				
 				let categorySpan = document.createElement("span");
-				categorySpan.classList.add("badge", "badge-pill", "badge-danger", "text-lowercase", "mx-1");
+				categorySpan.classList.add("badge", "badge-pill", "badge-danger", "text-lowercase", "mr-1");
 				categorySpan.innerHTML = category.name;
 				warningDiv.append(categorySpan);	
 			}
@@ -147,7 +147,7 @@ function showUserPost(post){
 				break;}
 		
 		document.querySelector('.posts').prepend(postDiv);
-		if(post.type == "warning"){
+		if(post.type == "warning" && (post.lat || post.lng)){
 			drawMap(`map-${post.id}`, post.lat, post.lng);
 		}
 		

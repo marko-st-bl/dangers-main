@@ -4,16 +4,13 @@
 <%@page import="marko.ip.dto.Category" %>
 <jsp:useBean id="categoryBean" class="marko.ip.beans.CategoryBean"
 	scope="session" />
-<%
-List<Category> categories = categoryBean.getAllCategories();
-%>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Danger Info | Warn</title>
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-<title>Dangers Info | Warn</title>
 <link rel="stylesheet" href="css/styles.css" />
 <!-- Bootstrap core JS-->
 <script
@@ -62,7 +59,7 @@ List<Category> categories = categoryBean.getAllCategories();
             	</div>
             </div>
             <div class="form-group row justify-content-center">
-            	<input class="form-control col-md-6 col-lg-5" name="description" type="text"/>
+            	<input class="form-control col-md-6 col-lg-5" name="description" type="text" required/>
             </div>
             
                 <div class="row justify-content-center">
@@ -71,8 +68,8 @@ List<Category> categories = categoryBean.getAllCategories();
                     </div>
                 </div>
                 <div class="form-group row justify-content-center">
-                    <select multiple class="form-control col-md-6 col-lg-5" name="category" size="3">
-                        <%for(Category cat: categories){
+                    <select multiple class="form-control col-md-6 col-lg-5" name="category" size="3" required>
+                        <%for(Category cat: categoryBean.getAllCategories()){
                         	out.print("<option value=\"" + cat.getId() + "\">" + cat.getName() + "</option>");
                         }
                         %>
@@ -89,12 +86,13 @@ List<Category> categories = categoryBean.getAllCategories();
                 </div>
                 <div class="form-group row justify-content-center">
                     <input id="lat" class="form-control col-md-6 col-lg-5" name="lat" type="number" step="0.000001"
-                        placeholder="Latitude">
+                        min="-90" max="90" placeholder="Latitude">
                 </div>
                 <div class="form-group row justify-content-center">
                     <input id="lon" class="form-control col-md-6 col-lg-5" name="lng" type="number" step="0.000001"
-                        placeholder="Longitude">
+                        min="-180" max="180" placeholder="Longitude">
                 </div>
+                <div class="text-danger text-center"><%= session.getAttribute("warning") %></div>
                 <div class="text-center">
                     <button class="btn btn-primary btn-xl text-uppercase" id="registerButton" type="submit">Add</button>
                 </div>
