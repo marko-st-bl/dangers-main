@@ -56,9 +56,10 @@ function addPostFormSubmitListener(){
 					form.reset();
 					$('#link-input-div').removeClass('show');
 					$('#youtube-input-div').removeClass('show');
-					
+					$('#img-preview').hide();
+					$('#video').hide();
 				} else {
-					alert("ERROR!");
+					alert(this.response);
 				}
 			};
 			xhr.send(new FormData(form));
@@ -140,7 +141,7 @@ function validateForm(form){
 	
 	// accepted youtube patern
 	const ytPattern = /^http[s]?:\/\/www\.youtube.com\/watch\?v=[a-zA-z0-9]+$/;
-	const urlPattern = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+	const urlPattern = /^(https?\:)\/\/(([^:\/?#]*)(?:\:([0-9]+))?)([\/]{0,1}[^?#]*)(\?[^#]*|)(#.*|)$/;
 	
 	switch (type.value){
 		case "text":

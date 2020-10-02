@@ -1,5 +1,10 @@
 package marko.ip.util;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.servlet.http.Part;
+
 import marko.ip.beans.UserBean;
 
 public class FormValidator {
@@ -88,6 +93,57 @@ public class FormValidator {
 			retVal = "You must choose at least one category.";
 		}
 		
+		return retVal;
+	}
+
+	public static String validateNewPostForm(String type, String text, String youtube, String link, Part imgPart,
+			Part videoPart) {
+		String retVal = "OK";
+		
+		String ytPattern = "^https?:\\/\\/www\\.youtube.com\\/watch\\?v=[a-zA-z0-9]+$";
+		String linkPattern = "^(https?\\:)\\/\\/(([^:\\/?#]*)(?:\\:([0-9]+))?)([\\/]{0,1}[^?#]*)(\\?[^#]*|)(#.*|)$";
+		String imgPattern = "^.*(jpeg|jpg|png|gif)$";
+		
+		switch (type) {
+		case "text":
+			if(text == null || text.equals("")) {
+				retVal = "You must enter some text.";
+			}
+			break;
+		case "youtube":
+			Pattern yt = Pattern.compile(ytPattern);
+			Matcher ytMatcher = yt.matcher(youtube);
+			if(!ytMatcher.matches()) {
+				retVal = "You must enter valid youtube link.";
+			}
+			break;
+		case "link":
+			Pattern url = Pattern.compile(linkPattern);
+			Matcher linkMatcher = url.matcher(link);
+			if(!linkMatcher.matches()) {
+				retVal = "You must enter valid http[s] address.";
+			}
+			break;
+		case "image":
+			Pattern img = Pattern.compile(imgPattern);
+			Matcher imgMatcher = img.matcher(imgPart.getSubmittedFileName());
+			if(imgPart == null || imgPart.getSize() == 0) {
+				retVal = "No image file added.";
+			} else if(!imgMatcher.matches()) {
+				System.out.println(imgPart.getSubmittedFileName());
+				retVal = "Unsuported image file type.";
+			}
+			break;
+		case "video":
+			if(videoPart == null || videoPart.getSize() == 0) {
+				retVal = "No video file added.";
+			} else if(!videoPart.getSubmittedFileName().endsWith(".mp4")) {
+				retVal = "Unsuported video file type. Add mp4 video.";
+			}
+			break;
+		default:
+			retVal = "Invalid post type.";
+		}
 		return retVal;
 	}
 }
