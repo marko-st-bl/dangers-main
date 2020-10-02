@@ -32,11 +32,15 @@ function addToggleListeners(){
 	$('#img-btn').click(function() {
 		$('#img-input').trigger('click');
 		$('#post-type').attr('value', 'image');
+		$('#link-input-div').removeClass('show');
+		$('#youtube-input-div').removeClass('show')
 	});
 	
 	$('#video-btn').click(function() {
 		$('#video-input').trigger('click');
 		$('#post-type').attr('value', 'video');
+		$('#link-input-div').removeClass('show');
+		$('#youtube-input-div').removeClass('show')
 	});
 }
 
@@ -58,8 +62,9 @@ function addPostFormSubmitListener(){
 					$('#youtube-input-div').removeClass('show');
 					$('#img-preview').hide();
 					$('#video').hide();
+					document.getElementById("validation-result").innerHTML = "";
 				} else {
-					alert(this.response);
+					document.getElementById("validation-result").innerHTML =  this.response;
 				}
 			};
 			xhr.send(new FormData(form));
@@ -67,30 +72,7 @@ function addPostFormSubmitListener(){
 			console.log("invalid form");
 		}
 	});
-	/*
-	$('#new-post-form').submit(function(e) {
-		e.preventDefault();
-		
-		$.ajax({
-			url : $(this).attr('action'),
-			type : $(this).attr('method'),
-			data : new FormData(this),
-			contentType : false,
-			cache : false,
-			processData : false,
-		}).done(function(response) {
-			if (response == 200) {
-				$('#img-preview').hide();
-				$('#video').hide();
-				$('#link-input').hide();
-				$('#youtube-input').hide();
-				$('#post-text').val('');
-			} else {
-				alert('Post not submitted...');
-			}
-		});
-	});
-	*/
+	
 }
 	
 function addPreviewListener(){
