@@ -38,7 +38,9 @@ public class FormValidator {
 		return retVal;
 	}
 	
-	public static String validateProfileForm(String firstName, String lastName, String username, String oldPassword, String password1, String password2, String email, UserBean userBean){
+	public static String validateProfileForm(String firstName, String lastName, String username, 
+			String oldPassword, String password1, String password2, String email, UserBean userBean, 
+			String country){
 		
 		String retVal = "OK";
 		
@@ -62,6 +64,8 @@ public class FormValidator {
 			} else if(!password1.equals(password2)) {
 				retVal = "Passwords dont match";
 			}
+		} else if (country == null || country.equals("")) {
+			retVal = "You must select country";
 		}
 		
 		return retVal;

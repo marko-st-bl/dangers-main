@@ -1,6 +1,7 @@
 package marko.ip.beans;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.servlet.http.HttpSessionBindingListener;
 
@@ -72,6 +73,10 @@ public class UserBean implements Serializable, HttpSessionBindingListener {
 
 	public void setLoggedIn(boolean isLoggedIn) {
 		this.isLoggedIn = isLoggedIn;
+	}
+	
+	public List<String> getRecipients(){
+		return new UserDAO().getRecipients();
 	}
 
 	/*

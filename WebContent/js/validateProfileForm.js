@@ -8,6 +8,7 @@ function validateForm(){
 	let oldPass = form.elements.oldPassword.value;
 	let password1 = form.elements.password1.value;
 	let password2 = form.elements.password2.value;
+	let country = form.elements.country.value;
 	
 	const message = document.getElementById('validationResult');
 	const namePattern = /^[A-Za-z]+$/;
@@ -46,6 +47,9 @@ function validateForm(){
 			message.innerHTML = "Passwords dont match!";
 			return false;
 		}
+	} else if (country == ""){
+		message.innerHTML = "You must select country!"
+			return false;
 	} else {
 		return true;
 	}

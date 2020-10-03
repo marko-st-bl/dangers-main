@@ -92,7 +92,7 @@
                     <input id="lon" class="form-control col-md-6 col-lg-5" name="lng" type="number" step="0.000001"
                         min="-180" max="180" placeholder="Longitude">
                 </div>
-                <div class="text-danger text-center"><%= session.getAttribute("warning") %></div>
+                <div class="text-danger text-center"><%= session.getAttribute("notification") %></div>
                 <div class="text-center">
                     <button class="btn btn-primary btn-xl text-uppercase" id="registerButton" type="submit">Add</button>
                 </div>

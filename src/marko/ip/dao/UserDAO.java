@@ -223,4 +223,32 @@ public class UserDAO {
 		}
 		return retVal;
 	}
+	
+	public List<String> getRecipients(){
+		List<String> retVal = new ArrayList<>();
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		String query = "select email from user "
+				+ "where notificationEmail=1";
+		
+		try {
+			conn = ConnectionPool.getConnectionPool().checkOut();
+			ps = conn.prepareStatement(query);
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				retVal.add(rs.getString(1));
+			}
+			
+			ps.close();
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionPool.getConnectionPool().checkIn(conn);
+		}
+		
+		return retVal;
+	}
 }

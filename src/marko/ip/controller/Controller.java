@@ -21,6 +21,7 @@ import marko.ip.beans.WarningBean;
 import marko.ip.dao.CategoryDAO;
 import marko.ip.dto.User;
 import marko.ip.dto.Warning;
+import marko.ip.mail.SendMail;
 import marko.ip.util.FormValidator;
 
 /**
@@ -154,7 +155,7 @@ public class Controller extends HttpServlet {
 
 			UserBean userBean = (UserBean) session.getAttribute("userBean");
 			String validationResult = FormValidator.validateProfileForm(firstName, lastName, username, oldPassword,
-					password1, password2, email, userBean);
+					password1, password2, email, userBean, country);
 
 			if (validationResult.equals("OK")) {
 				Part imgPart = request.getPart("img");
@@ -248,6 +249,11 @@ public class Controller extends HttpServlet {
 							warningBean.getWarning().getCategories()
 							.add(new CategoryDAO().getCategoryById(Integer.parseInt(catId)));
 						}
+						
+						// SEND EMAILS
+						SendMail smThread = new SendMail(userBean.getRecipients(), warningBean.getWarning());
+						new Thread(smThread).start();
+						
 						
 						warningBean.addWarning();
 						address = "WEB-INF/pages/warning.jsp";
